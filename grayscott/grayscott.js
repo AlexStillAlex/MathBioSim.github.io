@@ -7,6 +7,8 @@
  * p.mneila at upm.es
  */
 
+// || Note: All comments made by me (Alex) will start and end with. ||
+// || Example ||
 (function(){
 
 // Canvas.
