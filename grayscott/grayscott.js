@@ -20,6 +20,8 @@ var canvasHeight;
 var mMouseX, mMouseY;
 var mMouseDown = false;
 
+
+//||Rendering||
 var mRenderer;
 var mScene;
 var mCamera;
@@ -27,6 +29,7 @@ var mUniforms;
 var mColors;
 var mColorsNeedUpdate = true;
 var mLastTime = 0;
+
 
 var mTexture1, mTexture2;
 var mGSMaterial, mScreenMaterial;
