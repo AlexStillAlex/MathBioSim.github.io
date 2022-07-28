@@ -94,7 +94,7 @@ var presets = [
 var feed = presets[0].feed;
 var kill = presets[0].kill;
 
-init = function()
+init = function() // || Defined line 365||
 {
     init_controls();
 

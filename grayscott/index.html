@@ -8,28 +8,34 @@
         <link rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
-     
+        <!--||I'd read the documentation for 3.js rather than try this code||-->
         <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../3rd/colorPicker.js"></script>
         <script type="text/javascript" src="../3rd/three.min.js"></script>
         <script type="text/javascript" src="../gradientui/gradientui.js"></script>
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
+
+        <!-- ||This makes a shader that'll modify the vectors in the canvas. 
+            Projection and modelView matrices are given by 3.js||-->
+
         <script type="x-shader/x-vertex" id="standardVertexShader">
+
             varying vec2 vUv;
             
             void main()
-            {
+            {   
                 vUv = uv;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
         </script>
+        <!-- ||Have to define the variables we're using in each shader.|| -->
         <script type="x-shader/x-fragment" id="gsFragmentShader">
             varying vec2 vUv;
             uniform float screenWidth;
             uniform float screenHeight;
             uniform sampler2D tSource;
-            uniform float delta;
+            uniform float delta; 
             uniform float feed;
             uniform float kill;
             uniform vec2 brush;
@@ -173,6 +179,7 @@
             </section>
             <section id="controls">
                 <!--header><h4>Controls</h4></header-->
+                <!-- ||Gonna copy this for future option styles.|| -->
                 <form name="ex">
                     Presets:
                     <select name="scene" style="width:100%"
