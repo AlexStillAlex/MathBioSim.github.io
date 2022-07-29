@@ -93,6 +93,16 @@ var presets = [
     }
 ];
 
+
+
+//||Function to take text input||
+
+// function getVal() {
+//     const val = document.querySelector('input').value;
+//     return val 
+//   }
+  ////////////////////////////////////////////////////////////
+
 // Configuration.
 var feed = presets[0].feed;
 var kill = presets[0].kill;
@@ -129,6 +139,8 @@ init = function() // || Defined line 365||
         color4: {type: "v4", value: new THREE.Vector4(1, 0, 0, 0.4)},
         color5: {type: "v4", value: new THREE.Vector4(1, 1, 1, 0.6)}
     };
+
+    // ||mUniforms creates a list with colours. mColours takes this list and exclusively contains colours||
     mColors = [mUniforms.color1, mUniforms.color2, mUniforms.color3, mUniforms.color4, mUniforms.color5];
     $("#gradient").gradient("setUpdateCallback", onUpdatedColor);
 
@@ -149,6 +161,7 @@ init = function() // || Defined line 365||
 
     mColorsNeedUpdate = true;
 
+    //||I think this is just boiler plate stuff||
     resize(canvas.clientWidth, canvas.clientHeight);
 
     render(0);
