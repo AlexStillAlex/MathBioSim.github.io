@@ -97,10 +97,10 @@ var presets = [
 
 //||Function to take text input||
 
-// function getVal() {
-//     const val = document.querySelector('input').value;
-//     return val 
-//   }
+function getVal() {
+    const val = document.querySelector('input').value;
+    return val 
+  }
   ////////////////////////////////////////////////////////////
 
 // Configuration.
