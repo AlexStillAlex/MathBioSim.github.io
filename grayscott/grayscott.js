@@ -7,6 +7,8 @@
  * p.mneila at upm.es
  */
 
+// || Note: All comments made by me (Alex) will start and end with. ||
+// || Example ||
 (function(){
 
 // Canvas.
@@ -18,6 +20,8 @@ var canvasHeight;
 var mMouseX, mMouseY;
 var mMouseDown = false;
 
+
+//||Rendering||
 var mRenderer;
 var mScene;
 var mCamera;
@@ -25,6 +29,7 @@ var mUniforms;
 var mColors;
 var mColorsNeedUpdate = true;
 var mLastTime = 0;
+
 
 var mTexture1, mTexture2;
 var mGSMaterial, mScreenMaterial;
@@ -88,11 +93,39 @@ var presets = [
     }
 ];
 
+
+
+//||Function to take text input||
+
+function getVal() {
+    const val = document.querySelector('input').value;
+    return val 
+  }
+  ////////////////////////////////////////////////////////////
+
+
+  // ||Function to convert userinput function into the shader stuff||
+  function functoshader(){
+    var fstr = document.getElementById('F').value; // String of user input from f(x,y)
+    var gstr = document.getElementById('G').value; // String of user input from g(x,y)
+
+    // Changes instances of x,y to uv.r,uv.g for use in shader language for f(x,y). This is spaghetti
+    var fstr1 = fstr.replace(/x/g, "uv.r"); 
+    var FSTR = fstr1.replace(/y/g, "uv.g");
+
+    var gstr1 = gstr.replace(/x/g, "uv.r"); 
+    var GSTR = gstr1.replace(/y/g, "uv.g");
+
+    return [FSTR,GSTR]
+
+}
+////////////////////////////////////////////////////////////////
+
 // Configuration.
 var feed = presets[0].feed;
 var kill = presets[0].kill;
 
-init = function()
+init = function() // || Defined line 365||
 {
     init_controls();
 
@@ -124,6 +157,8 @@ init = function()
         color4: {type: "v4", value: new THREE.Vector4(1, 0, 0, 0.4)},
         color5: {type: "v4", value: new THREE.Vector4(1, 1, 1, 0.6)}
     };
+
+    // ||mUniforms creates a list with colours. mColours takes this list and exclusively contains colours||
     mColors = [mUniforms.color1, mUniforms.color2, mUniforms.color3, mUniforms.color4, mUniforms.color5];
     $("#gradient").gradient("setUpdateCallback", onUpdatedColor);
 
@@ -144,6 +179,7 @@ init = function()
 
     mColorsNeedUpdate = true;
 
+    //||I think this is just boiler plate stuff||
     resize(canvas.clientWidth, canvas.clientHeight);
 
     render(0);

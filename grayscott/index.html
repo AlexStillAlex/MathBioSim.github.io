@@ -2,35 +2,47 @@
 <html>
     <head>
         <title>Reaction diffusion simulation</title>
+
+    
         <link rel="stylesheet" type="text/css" href="../css/experiments.css"/>
         <link rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+
+        <!--||I'd read the documentation for 3.js rather than try this code||-->
         <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../3rd/colorPicker.js"></script>
         <script type="text/javascript" src="../3rd/three.min.js"></script>
         <script type="text/javascript" src="../gradientui/gradientui.js"></script>
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
+
+        <!-- ||This makes a shader that'll modify the vectors in the canvas. 
+            Projection and modelView matrices are given by 3.js||-->
+
         <script type="x-shader/x-vertex" id="standardVertexShader">
+
             varying vec2 vUv;
             
             void main()
-            {
+            {   
                 vUv = uv;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
         </script>
+        <!-- ||Have to define the variables we're using in each shader.|| -->
         <script type="x-shader/x-fragment" id="gsFragmentShader">
             varying vec2 vUv;
             uniform float screenWidth;
             uniform float screenHeight;
             uniform sampler2D tSource;
-            uniform float delta;
+            uniform float delta;  // ||This is equivalent to dt in the forward euler.||
             uniform float feed;
             uniform float kill;
             uniform vec2 brush;
             
             vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
+
+            // ||This is equivalent to dx and dy.||
             float step_x = 1.0/screenWidth;
             float step_y = 1.0/screenHeight;
             
@@ -45,6 +57,9 @@
                 //float feed = vUv.y * 0.083;
                 //float kill = vUv.x * 0.073;
                 
+
+
+                //|| the euler step TODO:||
                 vec2 uv = texture2D(tSource, vUv).rg;
                 vec2 uv0 = texture2D(tSource, vUv+vec2(-step_x, 0.0)).rg;
                 vec2 uv1 = texture2D(tSource, vUv+vec2(step_x, 0.0)).rg;
@@ -52,8 +67,14 @@
                 vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
                 
                 vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);//10485.76;
+
+                                    //  ||Diffusion coefficients|| (And Forward Euler)||                  
                 float du = /*0.00002*/0.2097*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
                 float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
+
+                //float du = /*0.00002*/0.2097*lapl.r + functoshader()[0];
+               //float dv = /*0.00001*/0.105*lapl.g + functoshader()[1];
+
                 vec2 dst = uv + delta*vec2(du, dv);
                 
                 if(brush.x > 0.0)
@@ -119,6 +140,8 @@
             	gl_FragColor = vec4(col.r, col.g, col.b, 1.0);
             }
         </script>
+
+         <!-- ||This stuff is the ACTUAL html. Like the content/canvas...Not the above mess|| -->
         <script type="text/javascript" src="grayscott.js"></script>
         <meta charset="UTF-8">
         <style>
@@ -151,12 +174,14 @@
             });
         </script>
     </head>
+
+   
     <body>
         <header>
-            <h1>Reaction diffusion system (Gray-Scott model)</h1>
+            <h1>Whats the difference between a good joke and a bad joke timing</h1>
         </header>
         <div id="simulation">
-        <canvas id="myCanvas" class="viewer" style="width:1024px;height:512px"></canvas>
+        <canvas id="myCanvas" class="viewer" style="width:1024px;height:652px"></canvas> <!-- || originally 1024 x 512-->
         <aside class="panel">
             <section id="instructions">
                 <header><h4>Instructions</h4></header>
@@ -168,6 +193,7 @@
             </section>
             <section id="controls">
                 <!--header><h4>Controls</h4></header-->
+                <!-- ||Gonna copy this for future option styles.|| -->
                 <form name="ex">
                     Presets:
                     <select name="scene" style="width:100%"
@@ -195,10 +221,18 @@
                 Feed rate:
                 <span class="remark" id="replenishment"></span><br/>
                 <div id="sld_replenishment" class="slider"></div>
-                
+
+
                 Death rate:
                 <span class ="remark" id="diminishment"></span><br/>
                 <div id="sld_diminishment" class="slider"></div>
+
+
+                <!-- ||Places the text box and calls the getVal function|| -->
+                <label for="name">f(u,v) = </label> 
+                <input type="text" placeholder="Enter text" onblur="getVal()">
+                <!-- //////////////////////////////////////////// -->
+                    <br><br>
                 Colors:
                 <div id="gradient" style=""></div>
                 <div style="font-size:x-small">Share (paste and press enter):</div>
