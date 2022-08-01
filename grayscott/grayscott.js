@@ -103,6 +103,24 @@ function getVal() {
   }
   ////////////////////////////////////////////////////////////
 
+
+  // ||Function to convert userinput function into the shader stuff||
+  function functoshader(){
+    var fstr = document.getElementById('F').value; // String of user input from f(x,y)
+    var gstr = document.getElementById('G').value; // String of user input from g(x,y)
+
+    // Changes instances of x,y to uv.r,uv.g for use in shader language for f(x,y). This is spaghetti
+    var fstr1 = fstr.replace(/x/g, "uv.r"); 
+    var FSTR = fstr1.replace(/y/g, "uv.g");
+
+    var gstr1 = gstr.replace(/x/g, "uv.r"); 
+    var GSTR = gstr1.replace(/y/g, "uv.g");
+
+    return [FSTR,GSTR]
+
+}
+////////////////////////////////////////////////////////////////
+
 // Configuration.
 var feed = presets[0].feed;
 var kill = presets[0].kill;
