@@ -72,7 +72,7 @@
                 float du = /*0.00002*/0.2097*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
                 float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
 
-                //float du = /*0.00002*/0.2097*lapl.r + functoshader()[0];
+                //float du = /*0.00002*/0.2097*lapl.r + eval(functoshader()[0]);
                //float dv = /*0.00001*/0.105*lapl.g + functoshader()[1];
 
                 vec2 dst = uv + delta*vec2(du, dv);
@@ -229,10 +229,16 @@
 
 
                 <!-- ||Places the text box and calls the getVal function|| -->
-                <label for="name">f(u,v) = </label> 
-                <input type="text" placeholder="Enter text" onblur="getVal()">
+                <label for="name">f(x,y) = </label> 
+                <input type="text" value="-x *y *y + 0.37*(1.0 - x)" onblur="getVal()">
                 <!-- //////////////////////////////////////////// -->
                     <br><br>
+                <label for="name">g(x,y) = </label> 
+                <input type="text" value="x*y*y - 0.043*y" onblur="getVal()">
+<!-- 
+                float du = /*0.00002*/0.2097*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
+                float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g; -->
+
                 Colors:
                 <div id="gradient" style=""></div>
                 <div style="font-size:x-small">Share (paste and press enter):</div>
