@@ -249,6 +249,9 @@
 
                 <script>
                     function stringscript(){
+
+                        // The script that we want to inject into the new body
+                        // This is currently a test to see if it changes to the solitons preset.
                         script = `
                         varying vec2 vUv;
                         uniform float screenWidth;
@@ -313,6 +316,7 @@
 
                     }
                 </script>
+
                 <script>
                     function insertHTML(html, dest, append=false){
                         // if no append is requested, clear the target element
@@ -339,10 +343,10 @@
                     }
                 </script>
                 <script> 
-                    function CHANGE(){
 
-                    // var new variables = functoshader() 
-                    // var script = THE NEW SCRIPT WITH
+
+                    function CHANGE(){
+                        // Executes the changing of the gsFragmentShader script
                         insertHTML(stringscript(), document.getElementById('gsFragmentShader'))
                 }
                 </script>
