@@ -247,7 +247,7 @@
                 <label for="name">g(x,y) = </label> 
                 <input id = 'G' type="text" value="x*y*y - 0.043*y" onblur="getVal()" src = "grayscott.js">
 
-                <script>
+                <script type = "text/javascript" id = "stringscript">
                     function stringscript(){
 
                         // The script that we want to inject into the new body
@@ -317,7 +317,7 @@
                     }
                 </script>
 
-                <script>
+                <script type = "text/javascript">
                     function insertHTML(html, dest, append=false){
                         // if no append is requested, clear the target element
                         if(!append) dest.innerHTML = '';
@@ -346,9 +346,22 @@
 
 
                     function CHANGE(){
+                        var flag = true 
+                        // Cache original script TODO
+                        
                         // Executes the changing of the gsFragmentShader script
-                        insertHTML(stringscript(), document.getElementById('gsFragmentShader'))
-                }
+                        insertHTML(stringscript(), document.getElementById('gsFragmentShader'));
+                        // Cache new script TODO
+
+                        // Reload page ``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````                        window.location.reload(true)
+
+                        // Access cached script TODO
+
+                        // run page with cached script TODO
+                        
+                        // set Flag = FALSE
+                        
+                    }
                 </script>
 
             <input type = 'button' value = "GO! " onclick = "CHANGE()" >  <br>
