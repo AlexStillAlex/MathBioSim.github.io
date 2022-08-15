@@ -229,7 +229,7 @@ var render = function(time)
         dt = 0.8;
     mLastTime = time;
 
-    
+    //New line!
     mGSMaterial.fragmentShader = document.getElementById('gsFragmentShader').textContent;
 
 
