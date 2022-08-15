@@ -15,13 +15,13 @@
         <script type="text/javascript" src="../3rd/three.min.js"></script>
         <script type="text/javascript" src="../gradientui/gradientui.js"></script>
 
-        <script type = "text/javascript" src ="../grayscott/grayscott.js"> </script>
+        <script type defer = "text/javascript" src ="../grayscott/grayscott.js"> </script>
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
 
         <!-- ||This makes a shader that'll modify the vectors in the canvas. 
             Projection and modelView matrices are given by 3.js||-->
 
-        <script type="x-shader/x-vertex" id="standardVertexShader">
+        <script type="x-shader/x-vertex" id="standardVertexShader" defer>
 
             varying vec2 vUv;
             
@@ -36,7 +36,7 @@
 
         <!-- ||Have to define the variables we're using in each shader.|| -->
 
-        <script type="x-shader/x-fragment" id="gsFragmentShader">
+        <script type="x-shader/x-fragment" id="gsFragmentShader" defer>
             varying vec2 vUv;
             uniform float screenWidth;
             uniform float screenHeight;
@@ -81,8 +81,6 @@
                 float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
                 
 
-                // float du =   eval(/*0.00002*/0.2097*lapl.r + functoshader()[0]);
-               //float dv = /*0.00001*/0.105*lapl.g + functoshader()[1];
 
                 vec2 dst = uv + delta*vec2(du, dv);
                 
@@ -247,8 +245,11 @@
                 <label for="name">g(x,y) = </label> 
                 <input id = 'G' type="text" value="x*y*y - 0.043*y" onblur="getVal()" src = "grayscott.js">
 
-                <script>
+                <script type = "text/javascript" id = "stringscript">
                     function stringscript(){
+
+                        // The script that we want to inject into the new body
+                        // This is currently a test to see if it changes to the solitons preset.
                         script = `
                         varying vec2 vUv;
                         uniform float screenWidth;
@@ -313,7 +314,8 @@
 
                     }
                 </script>
-                <script>
+
+                <script type = "text/javascript">
                     function insertHTML(html, dest, append=false){
                         // if no append is requested, clear the target element
                         if(!append) dest.innerHTML = '';
@@ -338,16 +340,56 @@
                         return true;
                     }
                 </script>
-                <script> 
-                    function CHANGE(){
 
-                    // var new variables = functoshader() 
-                    // var script = THE NEW SCRIPT WITH
-                        insertHTML(stringscript(), document.getElementById('gsFragmentShader'))
-                }
+                <script> 
+
+                    //The block that does stuff upon reload.
+
+                    //injects the script
+                    function Change() {
+                        insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
+                    }
+                    //script that happens on page reload.
+                    window.onload = function load() {
+                        //true if button clicked
+                        var reloading = sessionStorage.getItem("reloading");
+                        if (reloading) {
+                            sessionStorage.removeItem("reloading");
+                            Change();
+                        
+                    }
+                }   //Reloads page
+                    function reloadP() {
+                        sessionStorage.setItem("reloading", "true");
+                        window.location.reload();
+                        return false
+                        
+                    }
+                    //End of reload block
+
+
+                    //REDUNDANT this has been done in the above line
+                    function CHANGE(){
+                        var flag = true 
+                        // Cache original script TODO
+                        
+                        // Executes the changing of the gsFragmentShader script
+                        insertHTML(stringscript(), document.getElementById('gsFragmentShader'));
+                        // Cache new script TODO
+
+                        // Reload page ``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````                        window.location.reload(true)
+
+                        // Access cached script TODO
+
+                        // run page with cached script TODO
+                        
+                        // set Flag = FALSE
+                        window.location.reload()
+                        return false 
+                    }
                 </script>
 
-            <input type = 'button' value = "GO! " onclick = "CHANGE()" >  <br>
+            <input type = 'button' value = "GO! " onclick = "reloadP()" >  <br>
                 
            
 
@@ -375,11 +417,9 @@
                 
                 }
             </script>
-        <!-- || This function will change the shader script at the top. Hopefully it'll work!!!!|| -->
+  
 
                     
-    
-
 
                 Colors:
                 <div id="gradient" style=""></div>

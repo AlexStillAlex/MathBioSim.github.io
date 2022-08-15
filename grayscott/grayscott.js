@@ -162,9 +162,10 @@ init = function() // || Defined line 365||
     mColors = [mUniforms.color1, mUniforms.color2, mUniforms.color3, mUniforms.color4, mUniforms.color5];
     $("#gradient").gradient("setUpdateCallback", onUpdatedColor);
 
+    // Maybe need to change the fragment shader part to get what we want! 
     mGSMaterial = new THREE.ShaderMaterial({
             uniforms: mUniforms,
-            vertexShader: document.getElementById('standardVertexShader').textContent,
+            vertexShader: document.getElementById('standardVertexShader').innerHTML,
             fragmentShader: document.getElementById('gsFragmentShader').textContent,
         });
     mScreenMaterial = new THREE.ShaderMaterial({
@@ -220,12 +221,17 @@ var resize = function(width, height)
     mUniforms.screenHeight.value = canvasHeight/2;
 }
 
+//The most important part here
 var render = function(time)
 {
     var dt = (time - mLastTime)/20.0;
     if(dt > 0.8 || dt<=0)
         dt = 0.8;
     mLastTime = time;
+
+    //New line!
+    mGSMaterial.fragmentShader = document.getElementById('gsFragmentShader').textContent;
+
 
     mScreenQuad.material = mGSMaterial;
     mUniforms.delta.value = dt;
