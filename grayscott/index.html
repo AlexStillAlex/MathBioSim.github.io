@@ -344,17 +344,21 @@
                 <script> 
 
                     //The block that does stuff upon reload.
+
+                    //injects the script
                     function Change() {
                         insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
                     }
+                    //script that happens on page reload.
                     window.onload = function load() {
+                        //true if button clicked
                         var reloading = sessionStorage.getItem("reloading");
                         if (reloading) {
                             sessionStorage.removeItem("reloading");
                             Change();
                         
                     }
-                }
+                }   //Reloads page
                     function reloadP() {
                         sessionStorage.setItem("reloading", "true");
                         window.location.reload();
