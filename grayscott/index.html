@@ -9,19 +9,31 @@
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
         <!--||I'd read the documentation for 3.js rather than try this code||-->
-        <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
-        <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
-        <script type="text/javascript" src="../3rd/colorPicker.js"></script>
-        <script type="text/javascript" src="../3rd/three.min.js"></script>
-        <script type="text/javascript" src="../gradientui/gradientui.js"></script>
+        <script   type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
+        <script  type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
+        <script  type="text/javascript" src="../3rd/colorPicker.js"></script>
+        <script  type="text/javascript" src="../3rd/three.min.js"></script>
+        <script  type="text/javascript" src="../gradientui/gradientui.js"></script>
+        <script>
+        function reloadP() {
+            sessionStorage.setItem("reloading", "true");
+            window.location.reload();
+            return false
+            
+        }
+    </script>
 
-        <script type defer = "text/javascript" src ="../grayscott/grayscott.js"> </script>
+
+        <script async  type  = "text/javascript" src ="../grayscott/grayscott.js"> </script>
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
+
+
+
 
         <!-- ||This makes a shader that'll modify the vectors in the canvas. 
             Projection and modelView matrices are given by 3.js||-->
 
-        <script type="x-shader/x-vertex" id="standardVertexShader" defer>
+        <script type="x-shader/x-vertex" id="standardVertexShader" async>
 
             varying vec2 vUv;
             
@@ -151,7 +163,6 @@
         </script>
 
          <!-- ||This stuff is the ACTUAL html. Like the content/canvas...Not the above mess|| -->
-        <script type="text/javascript" src="grayscott.js"></script>
         <meta charset="UTF-8">
         <style>
             #gradient
@@ -350,7 +361,7 @@
                         insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
                     }
                     //script that happens on page reload.
-                    window.onload = function load() {
+                    location.onload = function load() {
                         //true if button clicked
                         var reloading = sessionStorage.getItem("reloading");
                         if (reloading) {
@@ -359,37 +370,14 @@
                         
                     }
                 }   //Reloads page
-                    function reloadP() {
-                        sessionStorage.setItem("reloading", "true");
-                        window.location.reload();
-                        return false
-                        
-                    }
+                    
                     //End of reload block
 
 
-                    //REDUNDANT this has been done in the above line
-                    function CHANGE(){
-                        var flag = true 
-                        // Cache original script TODO
-                        
-                        // Executes the changing of the gsFragmentShader script
-                        insertHTML(stringscript(), document.getElementById('gsFragmentShader'));
-                        // Cache new script TODO
-
-                        // Reload page ``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````                        window.location.reload(true)
-
-                        // Access cached script TODO
-
-                        // run page with cached script TODO
-                        
-                        // set Flag = FALSE
-                        window.location.reload()
-                        return false 
-                    }
+                    //REDUNDANT this has been done in the above line (DELETED)
                 </script>
 
-            <input type = 'button' value = "GO! " onclick = "reloadP()" >  <br>
+            <input type = 'button' value = "GO! " onclick = "Change()" >  <br>
                 
            
 
