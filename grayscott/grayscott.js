@@ -125,7 +125,7 @@ function getVal() {
 var feed = presets[0].feed;
 var kill = presets[0].kill;
 
-init = function() // || Defined line 365||
+init = function() // 
 {
     init_controls();
 
@@ -136,11 +136,13 @@ init = function() // || Defined line 365||
     canvas.onmouseup = onMouseUp;
     canvas.onmousemove = onMouseMove;
 
+    //Might be the magic line to changeeeeeeee
     mRenderer = new THREE.WebGLRenderer({canvas: canvas, preserveDrawingBuffer: true});
 
     mScene = new THREE.Scene();
     mCamera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
-    mCamera.position.z = 100;
+    mCamera.position.z = 100; 
+
     mScene.add(mCamera);
 
     mUniforms = {
@@ -166,7 +168,7 @@ init = function() // || Defined line 365||
     mGSMaterial = new THREE.ShaderMaterial({
             uniforms: mUniforms,
             vertexShader: document.getElementById('standardVertexShader').innerHTML,
-            fragmentShader: document.getElementById('gsFragmentShader').textContent,
+            fragmentShader: document.getElementById('gsFragmentShader').innerHTML,
         });
     mScreenMaterial = new THREE.ShaderMaterial({
                 uniforms: mUniforms,
@@ -183,8 +185,10 @@ init = function() // || Defined line 365||
     //||I think this is just boiler plate stuff||
     resize(canvas.clientWidth, canvas.clientHeight);
 
+    //THIS IS HOW THE INITIAL RENDER BEGINS
     render(0);
-    mUniforms.brush.value = new THREE.Vector2(0.5, 0.5);
+    //This is the initial 'spot location' in (x,y)
+    mUniforms.brush.value = new THREE.Vector2(0.25, 0.25);
     mLastTime = new Date().getTime();
     requestAnimationFrame(render);
 }
@@ -231,7 +235,8 @@ var render = function(time)
 
     //New line!
     mGSMaterial.fragmentShader = document.getElementById('gsFragmentShader').textContent;
-
+    //this fucking line recompiles
+    mGSMaterial.needsUpdate = true
 
     mScreenQuad.material = mGSMaterial;
     mUniforms.delta.value = dt;
@@ -299,7 +304,7 @@ var onMouseMove = function(e)
     mMouseY = ev.pageY - canvasQ.offset().top; //  scrolled documents too
 
     if(mMouseDown)
-        mUniforms.brush.value = new THREE.Vector2(mMouseX/canvasWidth, 1-mMouseY/canvasHeight);
+        mUniforms.brush.value = new THREE.Vector2(mMouseX/canvasWidth, 1-mMouseY/canvasHeight); //looks like normalised coordinates
 }
 
 var onMouseDown = function(e)
@@ -402,6 +407,8 @@ var worldToForm = function()
     $("#sld_diminishment").slider("value", kill);
 }
 
+
+// Adjusts the sliders and such
 var init_controls = function()
 {
     $("#sld_replenishment").slider({
@@ -444,7 +451,7 @@ var init_controls = function()
         autoOpen: false
     });
 }
-
+//Error handling for the share button at the buttom
 alertInvalidShareString = function()
 {
     $("#share").val("Invalid string!");
