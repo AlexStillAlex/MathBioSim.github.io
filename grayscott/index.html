@@ -244,7 +244,7 @@
 
                 <!-- ||Places the text box and calls the getVal function|| -->
                 <label for="name">f(x,y) = </label> 
-                <input id = 'F' type="text" value="-x *y *y + 0.37*(1.0 - x)" onblur="getVal()" src = "grayscott.js">
+                <input id = 'F' type="text" value="-x*y*y + 0.037*(1.0 - x)" onblur="getVal()" src = "grayscott.js">
                 <!-- //////////////////////////////////////////// -->
                     <br><br>
                 <label for="name">g(x,y) = </label> 
@@ -296,12 +296,10 @@
                             vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
             
                                                 //  ||Diffusion coefficients|| (And Forward Euler)||                  
-                            float du = /*0.00002*/0.2097*lapl.r + - uv.r*uv.g*uv.g + 0.03*(1.0 - uv.r);
+                            float du = /*0.00002*/0.2097*lapl.r + ${fFunc}; // + - uv.r*uv.g*uv.g + 0.03*(1.0 - uv.r);
                             
-                            float dv = /*0.00001*/0.105*lapl.g  + uv.r*uv.g*uv.g - (0.092)*uv.g;
-                            
-             
-            
+                    
+                            float dv = /*0.00001*/0.105*lapl.g  + ${gFunc};
                             vec2 dst = uv + delta*vec2(du, dv);
                             
                             if(brush.x > 0.0) 
@@ -311,15 +309,15 @@
                                 if(dist < 5.0)
                                     dst.g = 0.9;
                             }
-                            ` + '\
-                            gl_FragColor = vec4(dst.r, dst.g, 0.0, 1.0);\
-                        }'
+                             
+                            gl_FragColor = vec4(dst.r, dst.g, 0.0, 1.0);
+                        }`
                         return script
 
                     }
                 </script>
-
-                <script type = "text/javascript">
+                <!-- Two variants of scripts that will inject HTML -->
+                <script type = "text/javascript" id = "insertHTML">
                     function insertHTML(html, dest, append=false){
                         // if no append is requested, clear the target element
                         if(!append) dest.innerHTML = '';
@@ -338,12 +336,22 @@
                             if( scripts[i].hasAttribute('src') ) script.src = scripts[i].src;
                             script.innerHTML = scripts[i].innerHTML;
                             document.head.appendChild(script);
-                            document.head.removeChild(script);
+                            //document.head.removeChild(script);
                         }
                         // done!
                         return true;
                     }
+
+                    function HTMLinject(script,destinationID){
+                        dest = document.getElementById(destinationID); 
+
+                        //
+                        dest.innerHTML = script ;
+                        return true;
+
+                    }
                 </script>
+                
 
                 <script> 
 
@@ -352,6 +360,7 @@
                     //injects the script
                     function Change() {
                         insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
+                        //HTMLinject(stringscript(),'gsFragmentShader')
                     }
  
                 </script>
