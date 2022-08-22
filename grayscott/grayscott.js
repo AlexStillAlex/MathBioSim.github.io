@@ -234,8 +234,9 @@ var render = function(time)
     mLastTime = time;
 
     //New line!
-    mGSMaterial.fragmentShader = document.getElementById('gsFragmentShader').textContent;
+    mGSMaterial.fragmentShader = document.getElementById('gsFragmentShader').innerHTML;
     //this fucking line recompiles
+    //might be worth only recompiling when buttonpress is called. this will boost performance.
     mGSMaterial.needsUpdate = true
 
     mScreenQuad.material = mGSMaterial;
