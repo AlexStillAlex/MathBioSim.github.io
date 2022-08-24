@@ -154,9 +154,13 @@
     <body>
         <header>
             <h1>Reaction diffusion system (Gray-Scott model)</h1>
+            <h2 id = "functionInfo">Where we solve:<br>
+                \frac{\partial u}{\partial t} = /document.getElementById('F')<br>
+                \frac{\partial v}{\partial t} = /document.getElementById('G')
+                                </h2>
         </header>
         <div id="simulation">
-        <canvas id="myCanvas" class="viewer" style="width:1024px;height:512px"></canvas>
+        <canvas id="myCanvas" class="viewer" style="width:1024px;height:512 px"></canvas>
         <aside class="panel">
             <section id="instructions">
                 <header><h4>Instructions</h4></header>
@@ -191,14 +195,29 @@
                     <button id="btn_snapshot" onclick="snapshot()">Take snapshot</button>
                     <button id="btn_fullscreen" onclick="fullscreen()">Fullscreen mode</button>
                 <p/>
+
                 <h4 class="unsafe">Advanced settings</h4>
-                Feed rate:
+                <!-- ############################################### Commented out feed/death rates -->
+                <!-- Feed rate:
                 <span class="remark" id="replenishment"></span><br/>
                 <div id="sld_replenishment" class="slider"></div>
                 
                 Death rate:
                 <span class ="remark" id="diminishment"></span><br/>
-                <div id="sld_diminishment" class="slider"></div>
+                <div id="sld_diminishment" class="slider"></div> -->
+                <!-- '################################################### -->
+
+                <!-- ||Places the text box and calls the getVal function|| -->
+                <label for="name">f(u,v) = </label> 
+                <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
+                <!-- //////////////////////////////////////////// -->
+                    <br><br>
+                <label for="name">g(u,v) = </label> 
+                <input id = 'G' type="text" value="u*v*v - 0.043*v" onblur="getVal()" src = "grayscott.js">
+                <input type = 'button' value = "GO! " onclick = "Change()" >
+                <br>
+
+                
                 Colors:
                 <div id="gradient" style=""></div>
                 <div style="font-size:x-small">Share (paste and press enter):</div>
