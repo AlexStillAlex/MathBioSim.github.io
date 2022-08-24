@@ -119,8 +119,7 @@ init = function() //
 
     mScene = new THREE.Scene();
     mCamera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
-    mCamera.position.z = 100; 
-
+    mCamera.position.z = 100;
     mScene.add(mCamera);
 
     mUniforms = {
@@ -182,7 +181,7 @@ var resize = function(width, height)
     canvasHeight = canvasQ.height();
 
     mRenderer.setSize(canvasWidth, canvasHeight);
-
+//############################################################## Wrapping I guess???
     // TODO: Possible memory leak?
     mTexture1 = new THREE.WebGLRenderTarget(canvasWidth/2, canvasHeight/2,
                         {minFilter: THREE.LinearFilter,
@@ -194,11 +193,12 @@ var resize = function(width, height)
                          magFilter: THREE.LinearFilter,
                          format: THREE.RGBAFormat,
                          type: THREE.FloatType});
-    mTexture1.wrapS = THREE.RepeatWrapping;
-    mTexture1.wrapT = THREE.RepeatWrapping;
-    mTexture2.wrapS = THREE.RepeatWrapping;
-    mTexture2.wrapT = THREE.RepeatWrapping;
-
+                        /////////////////////////////////////////////NEW
+    mTexture1.texture.wrapS = THREE.RepeatWrapping;
+    mTexture1.texture.wrapT = THREE.RepeatWrapping;
+    mTexture2.texture.wrapS = THREE.RepeatWrapping;
+    mTexture2.texture.wrapT = THREE.RepeatWrapping;
+                            /////////////////////////////////
     mUniforms.screenWidth.value = canvasWidth/2;
     mUniforms.screenHeight.value = canvasHeight/2;
 }
