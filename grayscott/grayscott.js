@@ -194,10 +194,10 @@ var resize = function(width, height)
                          format: THREE.RGBAFormat,
                          type: THREE.FloatType});
                         /////////////////////////////////////////////NEW
-    mTexture1.texture.wrapS = THREE.RepeatWrapping;
-    mTexture1.texture.wrapT = THREE.RepeatWrapping;
-    mTexture2.texture.wrapS = THREE.RepeatWrapping;
-    mTexture2.texture.wrapT = THREE.RepeatWrapping;
+    mTexture1.wrapS = THREE.RepeatWrapping;
+    mTexture1.wrapT = THREE.RepeatWrapping;
+    mTexture2.wrapS = THREE.RepeatWrapping;
+    mTexture2.wrapT = THREE.RepeatWrapping;
                             /////////////////////////////////
     mUniforms.screenWidth.value = canvasWidth/2;
     mUniforms.screenHeight.value = canvasHeight/2;
