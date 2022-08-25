@@ -97,29 +97,7 @@ var presets = [
 
 //||Function to take text input||
 
-function getVal() {
-    const val = document.querySelector('input').value;
-    return val 
-  }
-  ////////////////////////////////////////////////////////////
 
-
-  // ||Function to convert userinput function into the shader stuff||
-  function functoshader(){
-    var fstr = document.getElementById('F').value; // String of user input from f(x,y)
-    var gstr = document.getElementById('G').value; // String of user input from g(x,y)
-
-    // Changes instances of x,y to uv.r,uv.g for use in shader language for f(x,y). This is spaghetti
-    var fstr1 = fstr.replace(/x/g, "uv.r"); 
-    var FSTR = fstr1.replace(/y/g, "uv.g");
-
-    var gstr1 = gstr.replace(/x/g, "uv.r"); 
-    var GSTR = gstr1.replace(/y/g, "uv.g");
-
-    return [FSTR,GSTR]
-
-}
-////////////////////////////////////////////////////////////////
 
 // Configuration.
 var feed = presets[0].feed;
@@ -141,8 +119,7 @@ init = function() //
 
     mScene = new THREE.Scene();
     mCamera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
-    mCamera.position.z = 100; 
-
+    mCamera.position.z = 100;
     mScene.add(mCamera);
 
     mUniforms = {
@@ -188,7 +165,7 @@ init = function() //
     //THIS IS HOW THE INITIAL RENDER BEGINS
     render(0);
     //This is the initial 'spot location' in (x,y)
-    mUniforms.brush.value = new THREE.Vector2(0.25, 0.25);
+    mUniforms.brush.value = new THREE.Vector2(0.5, 0.5);
     mLastTime = new Date().getTime();
     requestAnimationFrame(render);
 }
@@ -204,7 +181,7 @@ var resize = function(width, height)
     canvasHeight = canvasQ.height();
 
     mRenderer.setSize(canvasWidth, canvasHeight);
-
+//############################################################## Wrapping I guess???
     // TODO: Possible memory leak?
     mTexture1 = new THREE.WebGLRenderTarget(canvasWidth/2, canvasHeight/2,
                         {minFilter: THREE.LinearFilter,
@@ -216,11 +193,12 @@ var resize = function(width, height)
                          magFilter: THREE.LinearFilter,
                          format: THREE.RGBAFormat,
                          type: THREE.FloatType});
+                        /////////////////////////////////////////////NEW
     mTexture1.wrapS = THREE.RepeatWrapping;
     mTexture1.wrapT = THREE.RepeatWrapping;
     mTexture2.wrapS = THREE.RepeatWrapping;
     mTexture2.wrapT = THREE.RepeatWrapping;
-
+                            /////////////////////////////////
     mUniforms.screenWidth.value = canvasWidth/2;
     mUniforms.screenHeight.value = canvasHeight/2;
 }
@@ -412,18 +390,18 @@ var worldToForm = function()
 // Adjusts the sliders and such
 var init_controls = function()
 {
-    $("#sld_replenishment").slider({
-        value: feed, min: 0, max:0.1, step:0.001,
-        change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
-        slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
-    });
-    $("#sld_replenishment").slider("value", feed);
-    $("#sld_diminishment").slider({
-        value: kill, min: 0, max:0.073, step:0.001,
-        change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
-        slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
-    });
-    $("#sld_diminishment").slider("value", kill);
+    // $("#sld_replenishment").slider({
+    //     value: feed, min: 0, max:0.1, step:0.001,
+    //     change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
+    //     slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
+    // });
+    // $("#sld_replenishment").slider("value", feed);
+    // $("#sld_diminishment").slider({
+    //     value: kill, min: 0, max:0.073, step:0.001,
+    //     change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
+    //     slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
+    // });
+    // $("#sld_diminishment").slider("value", kill);
 
     $('#share').keypress(function (e) {
         if (e.which == 13) {

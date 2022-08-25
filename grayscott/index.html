@@ -7,22 +7,13 @@
         <link rel="stylesheet" type="text/css" href="../css/experiments.css"/>
         <link rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
-
-        <!--||I'd read the documentation for 3.js rather than try this code||-->
-        <script   type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
-        <script  type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
-        <script  type="text/javascript" src="../3rd/colorPicker.js"></script>
-        <script  type="text/javascript" src="../3rd/three.min.js"></script>
-        <script  type="text/javascript" src="../gradientui/gradientui.js"></script>
-        <script>
-    </script>
-
-
-        <script   type  = "text/javascript" src ="../grayscott/grayscott.js"> </script>
+        <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
+        <script type="text/javascript" src="../3rd/colorPicker.js"></script>
+        <script type="text/javascript" src="../3rd/three.min.js"></script>
+        <script type="text/javascript" src="../gradientui/gradientui.js"></script>
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
-
-
-
+        <script   type  = "text/javascript" src ="../grayscott/grayscott.js"> </script>
 
         <!-- ||This makes a shader that'll modify the vectors in the canvas. 
             Projection and modelView matrices are given by 3.js||-->
@@ -192,10 +183,10 @@
    
     <body>
         <header>
-            <h1>Whats the difference between a good joke and a bad joke timing</h1>
+            <h1>Reaction diffusion system (Gray-Scott model)</h1>
         </header>
         <div id="simulation">
-        <canvas id="myCanvas" class="viewer" style="width:1024px;height:652px"></canvas> <!-- || originally 1024 x 512-->
+        <canvas id="myCanvas" class="viewer" style="width:1024px;height:512px"></canvas>
         <aside class="panel">
             <section id="instructions">
                 <header><h4>Instructions</h4></header>
@@ -248,15 +239,15 @@
                 <!-- //////////////////////////////////////////// -->
                     <br><br>
                 <label for="name">g(x,y) = </label> 
-                <input id = 'G' type="text" value="x*y*y - 0.043*y" onblur="getVal()" src = "grayscott.js">
+                <input id = 'G' type="text" value="x*y*y - 0.097*y" onblur="getVal()" src = "grayscott.js">
 
                 <script type = "text/javascript" id = "stringscript">
                     function stringscript(){
                         
                         var fFunc = functoshader()[0];
                         var gFunc = functoshader()[1];
-                        // The script that we want to inject into the new body
-                        // This is currently a test to see if it changes to the solitons preset.
+                        // The script that we want to inject into the new body 
+                        
                         var script = `
                         varying vec2 vUv;
                         uniform float screenWidth;
@@ -296,10 +287,9 @@
                             vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
             
                                                 //  ||Diffusion coefficients|| (And Forward Euler)||                  
-                            float du = /*0.00002*/0.2097*lapl.r + ${fFunc}; // + - uv.r*uv.g*uv.g + 0.03*(1.0 - uv.r);
-                            
-                    
+                            float du = /*0.00002*/0.2097*lapl.r + ${fFunc}; 
                             float dv = /*0.00001*/0.105*lapl.g  + ${gFunc};
+
                             vec2 dst = uv + delta*vec2(du, dv);
                             
                             if(brush.x > 0.0) 
@@ -316,7 +306,7 @@
 
                     }
                 </script>
-                <!-- Two variants of scripts that will inject HTML -->
+
                 <script type = "text/javascript" id = "insertHTML">
                     function insertHTML(html, dest, append=false){
                         // if no append is requested, clear the target element
@@ -336,40 +326,27 @@
                             if( scripts[i].hasAttribute('src') ) script.src = scripts[i].src;
                             script.innerHTML = scripts[i].innerHTML;
                             document.head.appendChild(script);
-                            //document.head.removeChild(script);
+                            document.head.removeChild(script);
                         }
                         // done!
                         return true;
-                    }
-
-                    function HTMLinject(script,destinationID){
-                        dest = document.getElementById(destinationID); 
-
-                        //
-                        dest.innerHTML = script ;
-                        return true;
-
                     }
                 </script>
                 
 
                 <script> 
 
-                    //The block that does stuff upon reload.
 
                     //injects the script
                     function Change() {
                         insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
-                        //HTMLinject(stringscript(),'gsFragmentShader')
                     }
  
                 </script>
 
             <input type = 'button' value = "GO! " onclick = "Change()" >  <br>
                 
-           
-
-         <!-- || THESE FOLLOWING SCRIPTS SHOULD BE IN THE JS FILE BUT I'M THICK! || -->
+        
             <script>
                 function getVal(){
                     const val = document.querySelector('input').value;
