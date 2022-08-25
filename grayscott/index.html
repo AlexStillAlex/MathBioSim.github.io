@@ -3,9 +3,9 @@
     <head>
         <title>Reaction diffusion simulation</title>
 
-    
-        <link rel="stylesheet" type="text/css" href="../css/experiments.css"/>
-        <link rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
+        <link async rel="stylesheet" type="text/css" href="../css/experiments.css"/>
+        <link async rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
+
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
         <!--||I'd read the documentation for 3.js rather than try this code||-->
@@ -80,12 +80,10 @@
                 vec2 uv2 = texture2D(tSource, vUv+vec2(0.0, -step_y)).rg;
                 vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
                 
-                vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
 
-                                    //  ||Diffusion coefficients|| (And Forward Euler)||                  
-                float du = /*0.00002*/0.2097*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
-                float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
-                
+                vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);//10485.76;
+                float du = /*0.00002*/feed*lapl.r - uv.r*uv.g*uv.g + 0.037*(1.0 - uv.r);
+                float dv = /*0.00001*/kill*lapl.g + uv.r*uv.g*uv.g - (0.097)*uv.g;
 
 
                 vec2 dst = uv + delta*vec2(du, dv);
@@ -192,10 +190,16 @@
    
     <body>
         <header>
-            <h1>Whats the difference between a good joke and a bad joke timing</h1>
+
+            <h1>Reaction diffusion system (Gray-Scott model)</h1>
+            <h2 id = "functionInfo">Where we solve:<br>
+                \frac{\partial u}{\partial t} = /document.getElementById('F')<br>
+                \frac{\partial v}{\partial t} = /document.getElementById('G')
+                                </h2>
         </header>
         <div id="simulation">
-        <canvas id="myCanvas" class="viewer" style="width:1024px;height:652px"></canvas> <!-- || originally 1024 x 512-->
+        <canvas id="myCanvas" class="viewer" style="width:1024px;height:512 px"></canvas>
+
         <aside class="panel">
             <section id="instructions">
                 <header><h4>Instructions</h4></header>
@@ -231,171 +235,30 @@
                     <button id="btn_snapshot" onclick="snapshot()">Take snapshot</button>
                     <button id="btn_fullscreen" onclick="fullscreen()">Fullscreen mode</button>
                 <p/>
+
                 <h4 class="unsafe">Advanced settings</h4>
-                Feed rate:
+                <!-- ############################################### Commented out feed/death rates -->
+                Diffusion constant 1:
                 <span class="remark" id="replenishment"></span><br/>
                 <div id="sld_replenishment" class="slider"></div>
 
-
-                Death rate:
+                
+                Diffusion constant 2:
                 <span class ="remark" id="diminishment"></span><br/>
                 <div id="sld_diminishment" class="slider"></div>
-
+                <!-- '################################################### -->
 
                 <!-- ||Places the text box and calls the getVal function|| -->
-                <label for="name">f(x,y) = </label> 
-                <input id = 'F' type="text" value="-x*y*y + 0.037*(1.0 - x)" onblur="getVal()" src = "grayscott.js">
+                <label for="name">f(u,v) = </label> 
+                <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
                 <!-- //////////////////////////////////////////// -->
                     <br><br>
-                <label for="name">g(x,y) = </label> 
-                <input id = 'G' type="text" value="x*y*y - 0.043*y" onblur="getVal()" src = "grayscott.js">
+                <label for="name">g(u,v) = </label> 
+                <input id = 'G' type="text" value="u*v*v - 0.097*v" onblur="getVal()" src = "grayscott.js">
+                <input type = 'button' value = "GO! " onclick = "Change()" >
+                <br>
 
-                <script type = "text/javascript" id = "stringscript">
-                    function stringscript(){
-                        
-                        var fFunc = functoshader()[0];
-                        var gFunc = functoshader()[1];
-                        // The script that we want to inject into the new body
-                        // This is currently a test to see if it changes to the solitons preset.
-                        var script = `
-                        varying vec2 vUv;
-                        uniform float screenWidth;
-                        uniform float screenHeight;
-                        uniform sampler2D tSource;
-                        uniform float delta;  // ||This is equivalent to dt in the forward euler.||
-                        uniform float feed;
-                        uniform float kill;
-                        uniform vec2 brush;
-                        // ||GLSL DOESNT CARE FOR STRINGS||
-                        vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
-            
-                        // ||This is equivalent to dx and dy.||
-                        float step_x = 1.0/screenWidth;
-                        float step_y = 1.0/screenHeight; 
-                        void main()
-                        {
-                            if(brush.x < -5.0)
-                            {
-                                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-                                return;
-                            }
-                            
-                            //float feed = vUv.y * 0.083;
-                            //float kill = vUv.x * 0.073;
-                            
-            
-            
-                            //|| the euler step TODO:||
-            
-                            vec2 uv = texture2D(tSource, vUv).rg;
-                            vec2 uv0 = texture2D(tSource, vUv+vec2(-step_x, 0.0)).rg;
-                            vec2 uv1 = texture2D(tSource, vUv+vec2(step_x, 0.0)).rg;
-                            vec2 uv2 = texture2D(tSource, vUv+vec2(0.0, -step_y)).rg;
-                            vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
-                            
-                            vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
-            
-                                                //  ||Diffusion coefficients|| (And Forward Euler)||                  
-                            float du = /*0.00002*/0.2097*lapl.r + ${fFunc}; // + - uv.r*uv.g*uv.g + 0.03*(1.0 - uv.r);
-                            
-                    
-                            float dv = /*0.00001*/0.105*lapl.g  + ${gFunc};
-                            vec2 dst = uv + delta*vec2(du, dv);
-                            
-                            if(brush.x > 0.0) 
-                            {
-                                vec2 diff = (vUv - brush)/texel;
-                                float dist = dot(diff, diff);
-                                if(dist < 5.0)
-                                    dst.g = 0.9;
-                            }
-                             
-                            gl_FragColor = vec4(dst.r, dst.g, 0.0, 1.0);
-                        }`
-                        return script
-
-                    }
-                </script>
-                <!-- Two variants of scripts that will inject HTML -->
-                <script type = "text/javascript" id = "insertHTML">
-                    function insertHTML(html, dest, append=false){
-                        // if no append is requested, clear the target element
-                        if(!append) dest.innerHTML = '';
-                        // create a temporary container and insert provided HTML code
-                        let container = document.createElement('div');
-                        container.innerHTML = html;
-                        // cache a reference to all the scripts in the container
-                        let scripts = container.querySelectorAll('script');
-                        // get all child elements and clone them in the target element
-                        let nodes = container.childNodes;
-                        for( let i=0; i< nodes.length; i++) dest.appendChild( nodes[i].cloneNode(true) );
-                        // force the found scripts to execute...
-                        for( let i=0; i< scripts.length; i++){
-                            let script = document.createElement('script');
-                            script.type = scripts[i].type || 'text/javascript';
-                            if( scripts[i].hasAttribute('src') ) script.src = scripts[i].src;
-                            script.innerHTML = scripts[i].innerHTML;
-                            document.head.appendChild(script);
-                            //document.head.removeChild(script);
-                        }
-                        // done!
-                        return true;
-                    }
-
-                    function HTMLinject(script,destinationID){
-                        dest = document.getElementById(destinationID); 
-
-                        //
-                        dest.innerHTML = script ;
-                        return true;
-
-                    }
-                </script>
                 
-
-                <script> 
-
-                    //The block that does stuff upon reload.
-
-                    //injects the script
-                    function Change() {
-                        insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
-                        //HTMLinject(stringscript(),'gsFragmentShader')
-                    }
- 
-                </script>
-
-            <input type = 'button' value = "GO! " onclick = "Change()" >  <br>
-                
-           
-
-         <!-- || THESE FOLLOWING SCRIPTS SHOULD BE IN THE JS FILE BUT I'M THICK! || -->
-            <script>
-                function getVal(){
-                    const val = document.querySelector('input').value;
-                    return val ;
-                  }
-                </script>
-                
-                <script> 
-                  function functoshader(){
-                    var fstr = document.getElementById('F').value; // String of user input from f(x,y)
-                    var gstr = document.getElementById('G').value; // String of user input from g(x,y)
-                
-                    // Changes instances of x,y to uv.r,uv.g for use in shader language for f(x,y). This is spaghetti
-                    var fstr1 = fstr.replace(/x/g, `uv.r`); 
-                    var FSTR = fstr1.replace(/y/g, `uv.g`);
-                
-                    var gstr1 = gstr.replace(/x/g, `uv.r`); 
-                    var GSTR = gstr1.replace(/y/g, `uv.g`);
-                
-                    return [FSTR,GSTR]
-                
-                }
-            </script>
-  
-
-                    
 
                 Colors:
                 <div id="gradient" style=""></div>

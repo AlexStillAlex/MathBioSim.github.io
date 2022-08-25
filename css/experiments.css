@@ -3,7 +3,12 @@ body {
     font-family:sans-serif;
     background:#333333;
     color:#777777;
-    width: 1400px;
+
+    /* ################################## */
+    width: 1400px; /* originally 1000px */
+
+    /* ##################### */
+
     margin: 0 auto;
 }
 
@@ -40,14 +45,16 @@ a:active {color:#ffffff;}
     #simulation .viewer {
         display:table-cell;
     }
-    
+    /* This should control the main panel... */
     #simulation .panel {
         display:table-cell;
         vertical-align:top;
-        width: 400px;
+
+        width: 400px; /* originallly 200px */
+
         padding: 0px 5px 0px 5px;
         font-size: 9pt;
-        background:#151515;
+        background:#000000;
     }
         #simulation .panel header {
             color: #ffffff;
@@ -65,10 +72,10 @@ a:active {color:#ffffff;}
             border-bottom: 0px;
         }
 
-
+/* The right hand side */
 #myCanvas {
     display:block;
-    vertical-align:bottom;
+    
     background-color:#000000;
     border-right:1px solid;
 }

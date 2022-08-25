@@ -39,6 +39,7 @@ var mToggled = false;
 
 var mMinusOnes = new THREE.Vector2(-1, -1);
 
+
 // Some presets.
 var presets = [
     { // Default
@@ -125,7 +126,9 @@ function getVal() {
 var feed = presets[0].feed;
 var kill = presets[0].kill;
 
+
 init = function() // 
+
 {
     init_controls();
 
@@ -167,13 +170,15 @@ init = function() //
     // Maybe need to change the fragment shader part to get what we want! 
     mGSMaterial = new THREE.ShaderMaterial({
             uniforms: mUniforms,
+
             vertexShader: document.getElementById('standardVertexShader').innerHTML,
+
             fragmentShader: document.getElementById('gsFragmentShader').innerHTML,
         });
     mScreenMaterial = new THREE.ShaderMaterial({
                 uniforms: mUniforms,
                 vertexShader: document.getElementById('standardVertexShader').textContent,
-                fragmentShader: document.getElementById('screenFragmentShader').textContent,
+                fragmentShader: document.getElementById('screenFragmentShader').innerHTML,
             });
 
     var plane = new THREE.PlaneGeometry(1.0, 1.0);
@@ -233,11 +238,14 @@ var render = function(time)
         dt = 0.8;
     mLastTime = time;
 
-    //New line!
+
+    //##########################fragmentshaderupdate
     mGSMaterial.fragmentShader = document.getElementById('gsFragmentShader').innerHTML;
-    //this fucking line recompiles
-    //might be worth only recompiling when buttonpress is called. this will boost performance.
-    mGSMaterial.needsUpdate = true
+    mGSMaterial.needsUpdate = true;
+
+    //#################################################
+
+
 
     mScreenQuad.material = mGSMaterial;
     mUniforms.delta.value = dt;
@@ -388,6 +396,7 @@ fullscreen = function() {
     }
 }
 
+
 var isFullscreen = function()
 {
     return document.mozFullScreenElement ||
@@ -411,19 +420,22 @@ var worldToForm = function()
 
 // Adjusts the sliders and such
 var init_controls = function()
-{
+{//#######################################Very very very lazy implementation of adjusting diffusivity constants.
+
     $("#sld_replenishment").slider({
-        value: feed, min: 0, max:0.1, step:0.001,
+        value: feed, min: 0, max:0.5, step:0.01,
         change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
         slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
     });
     $("#sld_replenishment").slider("value", feed);
     $("#sld_diminishment").slider({
-        value: kill, min: 0, max:0.073, step:0.001,
+        value: kill, min: 0, max:0.5, step:0.01,
         change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
         slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
     });
     $("#sld_diminishment").slider("value", kill);
+
+    //###############################################
 
     $('#share').keypress(function (e) {
         if (e.which == 13) {
@@ -520,3 +532,134 @@ updateShareString = function()
 }
 
 })();
+
+////////////////////////NEW FUNCTIONS
+///////////////////////////////////////////////////////////// The block to get button working
+    
+//Gets the users input from the box
+function getVal(){
+    const val = document.querySelector('input').value;
+    return val;
+}
+
+//Converts user input into shader script
+function functoshader(){
+var fstr = document.getElementById('F').value; // String of user input from f(x,y)
+var gstr = document.getElementById('G').value; // String of user input from g(x,y)
+
+// Changes instances of u,v to uv.r,uv.g for use in shader language for f(u,v). This is spaghetti
+var fstr1 = fstr.replace(/u/g, `x`); 
+var fstr2 = fstr1.replace(/v/g, `y`);
+
+var FSTR1 = fstr2.replace(/x/g, 'uv.r');
+var FSTR = FSTR1.replace(/y/g, 'uv.g')
+
+
+var gstr1 = gstr.replace(/u/g, `x`); 
+var gstr2 = gstr1.replace(/v/g, `y`);
+
+var GSTR1 = gstr2.replace(/x/g, 'uv.r');
+var GSTR = GSTR1.replace(/y/g, 'uv.g')
+
+
+return [FSTR,GSTR]
+
+}
+
+
+function insertHTML(html, dest, append=false){
+// if no append is requested, clear the target element
+if(!append) dest.innerHTML = '';
+// create a temporary container and insert provided HTML code
+let container = document.createElement('div');
+container.innerHTML = html;
+// cache a reference to all the scripts in the container
+let scripts = container.querySelectorAll('script');
+// get all child elements and clone them in the target element
+let nodes = container.childNodes;
+for( let i=0; i< nodes.length; i++) dest.appendChild( nodes[i].cloneNode(true) );
+// force the found scripts to execute...
+for( let i=0; i< scripts.length; i++){
+    let script = document.createElement('script');
+    script.type = scripts[i].type || 'text/javascript';
+    if( scripts[i].hasAttribute('src') ) script.src = scripts[i].src;
+    script.innerHTML = scripts[i].innerHTML;
+    document.head.appendChild(script);
+    document.head.removeChild(script);
+}
+// done!
+return true;
+}
+
+function Change() {
+    flag = true;
+    if(flag = true){
+        insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
+    }
+    return flag;
+
+}
+
+function stringscript(){
+                        
+    var fFunc = functoshader()[0];
+    var gFunc = functoshader()[1];
+    // The script that we want to inject into the new body
+    var script = `
+    varying vec2 vUv;
+    uniform float screenWidth;
+    uniform float screenHeight;
+    uniform sampler2D tSource;
+    uniform float delta;  // ||This is equivalent to dt in the forward euler.||
+    uniform float feed;
+    uniform float kill;
+    uniform vec2 brush;
+    // ||GLSL DOESNT CARE FOR STRINGS||
+    vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
+
+    // ||This is equivalent to dx and dy.||
+    float step_x = 1.0/screenWidth;
+    float step_y = 1.0/screenHeight; 
+    void main()
+    {
+        if(brush.x < -5.0)
+        {
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            return;
+        }
+        
+        //float feed = vUv.y * 0.083;
+        //float kill = vUv.x * 0.073;
+        
+
+
+        //|| the euler step TODO:||
+
+        vec2 uv = texture2D(tSource, vUv).rg;
+        vec2 uv0 = texture2D(tSource, vUv+vec2(-step_x, 0.0)).rg;
+        vec2 uv1 = texture2D(tSource, vUv+vec2(step_x, 0.0)).rg;
+        vec2 uv2 = texture2D(tSource, vUv+vec2(0.0, -step_y)).rg;
+        vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
+        
+        vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
+
+                            //  ||Diffusion coefficients|| (And Forward Euler)||                  
+        float du = /*0.00002*/feed*lapl.r + ${fFunc}; 
+        float dv = /*0.00001*/kill*lapl.g  + ${gFunc};
+        vec2 dst = uv + delta*vec2(du, dv);
+        
+        if(brush.x > 0.0) 
+        {
+            vec2 diff = (vUv - brush)/texel;
+            float dist = dot(diff, diff);
+            if(dist < 5.0)
+                dst.g = 0.9;
+        }
+         
+        gl_FragColor = vec4(dst.r, dst.g, 0.0, 1.0);
+    }`
+    return script
+
+}
+
+
