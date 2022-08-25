@@ -380,7 +380,7 @@ var init_controls = function()
     });
     $("#sld_replenishment").slider("value", feed);
     $("#sld_diminishment").slider({
-        value: kill, min: 0, max:0.05, step:0.01,
+        value: kill, min: 0, max:0.5, step:0.01,
         change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
         slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
     });
