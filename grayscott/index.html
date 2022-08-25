@@ -52,8 +52,8 @@
                 vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
                 
                 vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);//10485.76;
-                float du = /*0.00002*/feed*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
-                float dv = /*0.00001*/kill*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
+                float du = /*0.00002*/feed*lapl.r - uv.r*uv.g*uv.g + 0.037*(1.0 - uv.r);
+                float dv = /*0.00001*/kill*lapl.g + uv.r*uv.g*uv.g - (0.097)*uv.g;
                 vec2 dst = uv + delta*vec2(du, dv);
                 
                 if(brush.x > 0.0)
