@@ -371,20 +371,20 @@ var worldToForm = function()
 }
 
 var init_controls = function()
-{//#######################################No more sliders
+{//#######################################Very very very lazy implementation of adjusting diffusivity constants.
 
-    // $("#sld_replenishment").slider({
-    //     value: feed, min: 0, max:0.1, step:0.001,
-    //     change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
-    //     slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
-    // });
-    // $("#sld_replenishment").slider("value", feed);
-    // $("#sld_diminishment").slider({
-    //     value: kill, min: 0, max:0.073, step:0.001,
-    //     change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
-    //     slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
-    // });
-    // $("#sld_diminishment").slider("value", kill);
+    $("#sld_replenishment").slider({
+        value: feed, min: 0, max:0.1, step:0.001,
+        change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
+        slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
+    });
+    $("#sld_replenishment").slider("value", feed);
+    $("#sld_diminishment").slider({
+        value: kill, min: 0, max:0.073, step:0.001,
+        change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
+        slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
+    });
+    $("#sld_diminishment").slider("value", kill);
 
     //###############################################
 
@@ -595,8 +595,8 @@ function stringscript(){
         vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
 
                             //  ||Diffusion coefficients|| (And Forward Euler)||                  
-        float du = /*0.00002*/0.2097*lapl.r + ${fFunc}; 
-        float dv = /*0.00001*/0.105*lapl.g  + ${gFunc};
+        float du = /*0.00002*/feed*lapl.r + ${fFunc}; 
+        float dv = /*0.00001*/kill*lapl.g  + ${gFunc};
         vec2 dst = uv + delta*vec2(du, dv);
         
         if(brush.x > 0.0) 

@@ -3,7 +3,10 @@ body {
     font-family:sans-serif;
     background:#333333;
     color:#777777;
-    width: 1000px;
+    /* ################################## */
+    width: 1400px; /* originally 1000px */
+
+    /* ##################### */
     margin: 0 auto;
 }
 
@@ -44,7 +47,8 @@ a:active {color:#ffffff;}
     #simulation .panel {
         display:table-cell;
         vertical-align:top;
-        width: 200px;
+
+        width: 400px; /* originallly 200px */
         padding: 0px 5px 0px 5px;
         font-size: 9pt;
         background:#000000;

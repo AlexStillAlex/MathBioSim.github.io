@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>Reaction diffusion simulation</title>
-        <link rel="stylesheet" type="text/css" href="../css/experiments.css"/>
-        <link rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
+        <link async rel="stylesheet" type="text/css" href="../css/experiments.css"/>
+        <link async rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
         <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
@@ -52,8 +52,8 @@
                 vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
                 
                 vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);//10485.76;
-                float du = /*0.00002*/0.2097*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
-                float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
+                float du = /*0.00002*/feed*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
+                float dv = /*0.00001*/kill*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
                 vec2 dst = uv + delta*vec2(du, dv);
                 
                 if(brush.x > 0.0)
@@ -198,13 +198,13 @@
 
                 <h4 class="unsafe">Advanced settings</h4>
                 <!-- ############################################### Commented out feed/death rates -->
-                <!-- Feed rate:
+                Diffusion constant 1:
                 <span class="remark" id="replenishment"></span><br/>
                 <div id="sld_replenishment" class="slider"></div>
                 
-                Death rate:
+                Diffusion constant 2:
                 <span class ="remark" id="diminishment"></span><br/>
-                <div id="sld_diminishment" class="slider"></div> -->
+                <div id="sld_diminishment" class="slider"></div>
                 <!-- '################################################### -->
 
                 <!-- ||Places the text box and calls the getVal function|| -->
