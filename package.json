@@ -1,0 +1,15 @@
+{
+  "name": "jsexp-master",
+  "version": "1.0.0",
+  "description": "====================== JavaScript Experiments ======================",
+  "main": "index.js",
+  "dependencies": {
+    "three": "^0.143.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
