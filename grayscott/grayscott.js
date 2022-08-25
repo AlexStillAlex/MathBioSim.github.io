@@ -543,8 +543,12 @@ return true;
 }
 
 function Change() {
-    insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
-    return true;
+    flag = true;
+    if(flag = true){
+        insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
+    }
+    return flag;
+
 }
 
 function stringscript(){
