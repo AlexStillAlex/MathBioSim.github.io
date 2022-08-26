@@ -63,10 +63,12 @@ return true;
 function Change() {
 
     insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
-
+    
+    var Fval = 'D_1 * nabla^2 (u) + ' + document.getElementById('F').value;
+    var Gval = 'D_2 * nabla^2 (v) + ' + document.getElementById('G').value;
     insertHTML(`Where we solve:<br>
-                \frac{\partial u}{\partial t} = /document.getElementById('F')<br>
-                \frac{\partial v}{\partial t} = /docmuent.getElementById('G'))`, 
+                du/dt = ${Fval}<br>
+                dv/dt = ${Gval}`, 
                 document.getElementById('functionInfo'))
     
     return true;
