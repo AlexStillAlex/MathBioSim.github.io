@@ -168,7 +168,7 @@ init = function() //
     //THIS IS HOW THE INITIAL RENDER BEGINS
     render(0);
     //This is the initial 'spot location' in (x,y)
-    mUniforms.brush.value = new THREE.Vector2(0.25, 0.25);
+    mUniforms.brush.value = new THREE.Vector2(0.5, 0.5);
     mLastTime = new Date().getTime();
     requestAnimationFrame(render);
 }

@@ -4,9 +4,9 @@
   "description": "====================== JavaScript Experiments ======================",
   "main": "index.js",
   "dependencies": {
+    "katex": "^0.16.1",
     "three": "^0.143.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
