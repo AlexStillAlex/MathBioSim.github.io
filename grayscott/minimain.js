@@ -11,6 +11,14 @@ function getVal(){
     return val;
 }
 
+//TODO: text to maths function
+//get input from boxes
+//convert to string
+//convert it to something resembling latex
+//inject it
+// hope the try/catch stuff is done beforehand
+//
+
 //Converts user input into shader script
 function functoshader(){
 var fstr = document.getElementById('F').value; // String of user input from f(x,y)
@@ -28,7 +36,9 @@ var gstr1 = gstr.replace(/u/g, `x`);
 var gstr2 = gstr1.replace(/v/g, `y`);
 
 var GSTR1 = gstr2.replace(/x/g, 'uv.r');
-var GSTR = GSTR1.replace(/y/g, 'uv.g')
+var GSTR = GSTR1.replace(/y/g, 'uv.g');
+
+
 
 
 return [FSTR,GSTR]

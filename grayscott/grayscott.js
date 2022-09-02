@@ -102,9 +102,10 @@ var feed = presets[0].feed;
 var kill = presets[0].kill;
 
 
-init = function() // 
+init = function() 
 
-{
+{//////////////////////////////////////////////////////////////////////////////////////////
+    //This block generates the materials used for the canvas and the constants in the pde
     init_controls();
 
     canvasQ = $('#myCanvas');
@@ -114,22 +115,29 @@ init = function() //
     canvas.onmouseup = onMouseUp;
     canvas.onmousemove = onMouseMove;
 
-    //Might be the magic line to changeeeeeeee
     mRenderer = new THREE.WebGLRenderer({canvas: canvas, preserveDrawingBuffer: true});
 
     mScene = new THREE.Scene();
+    //Camera always appears a 'fixed' distance away from canvas
     mCamera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
     mCamera.position.z = 100; 
 
     mScene.add(mCamera);
 
+    //Contains the constants that communicates with the gsFragmentscript
+    //this will be useful for the nondimensionalisation
     mUniforms = {
         screenWidth: {type: "f", value: undefined},
         screenHeight: {type: "f", value: undefined},
         tSource: {type: "t", value: undefined},
-        delta: {type: "f", value: 1.0},
+        delta: {type: "f", value: undefined},
         feed: {type: "f", value: feed},
         kill: {type: "f", value: kill},
+
+
+        //Adding this fucks up the code (probably because its value isnt set anywhere)
+        //kinA: {type: "f", value: undefined},
+
         brush: {type: "v2", value: new THREE.Vector2(-10, -10)},
         color1: {type: "v4", value: new THREE.Vector4(0, 0, 0.0, 0)},
         color2: {type: "v4", value: new THREE.Vector4(0, 1, 0, 0.2)},
@@ -158,11 +166,13 @@ init = function() //
 
     var plane = new THREE.PlaneGeometry(1.0, 1.0);
     mScreenQuad = new THREE.Mesh(plane, mScreenMaterial);
+
+    //after defining geometry,mesh and material we then add it to the scene
     mScene.add(mScreenQuad);
 
     mColorsNeedUpdate = true;
 
-    //||I think this is just boiler plate stuff||
+
     resize(canvas.clientWidth, canvas.clientHeight);
 
     //THIS IS HOW THE INITIAL RENDER BEGINS
@@ -196,6 +206,7 @@ var resize = function(width, height)
                          magFilter: THREE.LinearFilter,
                          format: THREE.RGBAFormat,
                          type: THREE.FloatType});
+    //Depreciated code but allows for the vertical and horizontal wrapping                     
     mTexture1.wrapS = THREE.RepeatWrapping;
     mTexture1.wrapT = THREE.RepeatWrapping;
     mTexture2.wrapS = THREE.RepeatWrapping;
@@ -204,11 +215,11 @@ var resize = function(width, height)
     mUniforms.screenWidth.value = canvasWidth/2;
     mUniforms.screenHeight.value = canvasHeight/2;
 }
-
-//The most important part here
+//////////////////////////////////////////////////////////////////////////////////////////////
+//The Rendering block
 var render = function(time)
 {
-    var dt = (time - mLastTime)/20.0;
+    var dt = (time - mLastTime)/0.05;
     if(dt > 0.8 || dt<=0)
         dt = 0.8;
     mLastTime = time;
@@ -223,12 +234,16 @@ var render = function(time)
 
 
     mScreenQuad.material = mGSMaterial;
+    //Important lines useful in changing the timestep/parameters in real time
     mUniforms.delta.value = dt;
     mUniforms.feed.value = feed;
     mUniforms.kill.value = kill;
 
+    //mUniforms.kinA.value = feed;
+
     for(var i=0; i<8; ++i)
     {
+        //Two cases for when mouse is pressed or not.
         if(!mToggled)
         {
             mUniforms.tSource.value = mTexture1;
@@ -250,11 +265,13 @@ var render = function(time)
         updateUniformsColors();
 
     mScreenQuad.material = mScreenMaterial;
+    //Rendering requires scene and camera/projection
     mRenderer.render(mScene, mCamera);
 
     requestAnimationFrame(render);
 }
-
+///////////////////////////////////////////////////////////////
+//This block is responsible for most of the UI (namely the panel)
 loadPreset = function(idx)
 {
     feed = presets[idx].feed;
@@ -262,6 +279,7 @@ loadPreset = function(idx)
     worldToForm();
 }
 
+//Updates colours on canvas according to colour slider in the panel.
 var updateUniformsColors = function()
 {
     var values = $("#gradient").gradient("getValuesRGBS");
@@ -328,11 +346,13 @@ snapshot = function()
 
 // resize canvas to fullscreen, scroll to upper left
 // corner and try to enable fullscreen mode and vice-versa
+
+//Alex here: Possibly a pointless feature - doesn't allow for wrapping.
 fullscreen = function() {
 
     var canv = $('#myCanvas');
     var elem = canv.get(0);
-
+    
     if(isFullscreen())
     {
         // end fullscreen
@@ -411,7 +431,8 @@ var init_controls = function()
     $("#sld_diminishment").slider("value", kill);
 
     //###############################################
-
+    //Looks like some Jquery nonsense I don't know.
+    //Gives a name to all the buttons - could change.
     $('#share').keypress(function (e) {
         if (e.which == 13) {
             parseShareString();
@@ -438,14 +459,16 @@ var init_controls = function()
     $("#requirement_dialog").dialog({
         autoOpen: false
     });
+
 }
+
 //Error handling for the share button at the buttom
 alertInvalidShareString = function()
 {
     $("#share").val("Invalid string!");
     setTimeout(updateShareString, 1000);
 }
-
+//Rejex shit or something
 parseShareString = function()
 {
     var str = $("#share").val();
