@@ -20,30 +20,35 @@ function getVal(){
 //
 
 //Converts user input into shader script
-function functoshader(){
-var fstr = document.getElementById('F').value; // String of user input from f(x,y)
-var gstr = document.getElementById('G').value; // String of user input from g(x,y)
 
-// Changes instances of u,v to uv.r,uv.g for use in shader language for f(u,v). This is spaghetti
-var fstr1 = fstr.replace(/u/g, `x`); 
-var fstr2 = fstr1.replace(/v/g, `y`);
-
-var FSTR1 = fstr2.replace(/x/g, 'uv.r');
-var FSTR = FSTR1.replace(/y/g, 'uv.g')
+//Takes string input
+function functoshader(str){
+    var str1 = str.replace(/u/g, `x`); //replaces all instances of (u,v) with (uv.r,uv.g)
+    var str2 = str1.replace(/v/g, `y`);
 
 
-var gstr1 = gstr.replace(/u/g, `x`); 
-var gstr2 = gstr1.replace(/v/g, `y`);
+    var STR1 = str2.replace(/x/g, 'uv.r');
+    var STR = STR1.replace(/y/g, 'uv.g');
 
-var GSTR1 = gstr2.replace(/x/g, 'uv.r');
-var GSTR = GSTR1.replace(/y/g, 'uv.g');
+    return STR
+} //This is an improvement on the code below.
+
+// function functoshader(){
+// var fstr = document.getElementById('F').value; // String of user input from f(x,y)
+// var gstr = document.getElementById('G').value; // String of user input from g(x,y)
+
+// // Changes instances of u,v to uv.r,uv.g for use in shader language for f(u,v). This is spaghetti
+// var fstr1 = fstr.replace(/u/g, `x`); 
+// var fstr2 = fstr1.replace(/v/g, `y`);
 
 
+// var gstr1 = gstr.replace(/u/g, `x`); 
+// var gstr2 = gstr1.replace(/v/g, `y`);
 
-
-return [FSTR,GSTR]
-
-}
+// var GSTR1 = gstr2.replace(/x/g, 'uv.r');
+// var GSTR = GSTR1.replace(/y/g, 'uv.g');
+// return [FSTR,GSTR]
+// }
 
 
 function insertHTML(html, dest, append=false){
@@ -87,8 +92,8 @@ function Change() {
 
 function stringscript(){
                         
-    var fFunc = functoshader()[0];
-    var gFunc = functoshader()[1];
+    var fFunc = functoshader(document.getElementById('F').value);
+    var gFunc = functoshader(document.getElementById('G').value);
     // The script that we want to inject into the new body
     var script = `
     varying vec2 vUv;

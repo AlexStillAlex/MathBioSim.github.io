@@ -11,6 +11,26 @@ body {
 
     margin: 0 auto;
 }
+/* The CSS for the table. */
+form
+{
+  display: inline-block;
+  background-color: black;
+  padding: 6px;
+}
+
+label{
+  display: block;
+  direction: ltr; 
+}
+
+input{
+  direction: ltr; 
+}
+
+label::after{
+  content: attr(data-text);
+}
 
 header, footer, aside, nav {
     display: block;

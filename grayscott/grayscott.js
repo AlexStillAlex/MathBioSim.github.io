@@ -219,9 +219,21 @@ var resize = function(width, height)
 //The Rendering block
 var render = function(time)
 {
-    var dt = (time - mLastTime)/0.05;
+
+    // // //if (user input){
+    //     dt = get(userinput)}
+    //     else
+
+    var dt = (time - mLastTime)/2;
+
+ //If not then go to the 'default' value of dt
     if(dt > 0.8 || dt<=0)
         dt = 0.8;
+           
+    if(document.getElementById('alterself').onclick) //Check when GO! is pressed
+        dt = document.getElementById('dt').value //Set the value of dt to the value in the box
+
+    //console.log(dt)
     mLastTime = time;
 
 

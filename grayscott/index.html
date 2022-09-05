@@ -267,28 +267,57 @@
                 <!-- '################################################### -->
 
 
-                <!-- Kinetic constants -->
-                <label for="name">Kinetic A</label> 
-                <input id = 'KinA' type="text" value="Currently does nothing" onblur="getVal()" src = "grayscott.js"> <br>
-
-                <label for="name">Kinetic B</label> 
-                <input id = 'KinB' type="text" value="" onblur="getVal()" src = "grayscott.js"><br>
-
-                <label for="name">Kinetic C</label> 
-                <input id = 'KinC' type="text" value="" onblur="getVal()" src = "grayscott.js"><br>
-                <br>
 
                 <!-- ######################################################################## -->
 
                 <!-- ||Places the text box and calls the getVal function|| -->
-                <label for="name">\(f(u,v) = \)</label> 
-                <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
+
                 <!-- //////////////////////////////////////////// -->
                     <br><br>
-                <label for="name">\(g(u,v) = \)</label> 
-                <input id = 'G' type="text" value="u*v*v - 0.097*v" onblur="getVal()" src = "grayscott.js">
-                <input type = 'button' value = "GO! " onclick = "Change()" >
 
+                    <br>
+
+
+                    <form>
+                        <p>
+                            <label for="name">\(f(u,v)  \)</label> 
+                            <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
+
+                        </p>
+
+                        <p>
+
+                            <label for="name">\(g(u,v) \)</label> 
+                            <input id = 'G' type="text" value="u*v*v - 0.097*v" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
+                        </p>
+
+                                        <!-- Variable time step -->
+                        <p>
+
+                        <label for="name">\(\Delta t \)<label> 
+                            <input id = 'dt' type="number" value="0.8" onblur="getVal()" src = "grayscott.js"> </p>
+
+
+            
+                                            <!-- Kinetic constants -->
+                                            <p>
+                            <label for="name">Kinetic A</label> 
+                            <input id = 'KinA' type="number" value="Currently does nothing" onblur="getVal()" src = "grayscott.js"> 
+                                            </p>
+                                            <p>
+                            <label for="name">Kinetic B</label> 
+                            <input id = 'KinB' type="number" value="" onblur="getVal()" src = "grayscott.js">
+                                            </p>
+                                            <p>
+                            <label for="name">Kinetic C</label> 
+                            <input id = 'KinC' type="number" value="" onblur="getVal()" src = "grayscott.js">
+                                                </p>
+            
+                      </form>
+
+
+                
          
                 
 
