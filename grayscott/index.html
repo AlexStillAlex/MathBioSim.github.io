@@ -6,19 +6,28 @@
         <link async rel="stylesheet" type="text/css" href="../css/experiments.css"/>
         <link async rel="stylesheet" type="text/css" href="../gradientui/gradientui.css"/>
 
+        <!-- ####################################################KATEX INSTALL -->
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/katex.min.css" integrity="sha384-pe7s+HmY6KvqRkrRRUr4alQJ0SkmzCft3RpK1ttGMa7qk8Abp/MEa/4wgceRHloO" crossorigin="anonymous">
+
+        <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/katex.min.js" integrity="sha384-YYpuPYVAiGj+ZojhNMsgPOEZqjDxPzaUxsIHRgIda7sbl1uLOwzlHW9lGXMcorkx" crossorigin="anonymous"></script>
+    
+        <!-- To automatically render math in text elements, include the auto-render extension: -->
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script>
+        <!-- ####################################################################### -->
+
+
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+        <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
+        <script type="text/javascript" src="../3rd/colorPicker.js"></script>
+        <script type="text/javascript" src="../3rd/three.min.js"></script>
+        <script type="text/javascript" src="../gradientui/gradientui.js"></script>
+        <script type = "text/javascript" src = "grayscott.js"></script>
+        <script type = "text/javascript" src = "minimain.js"></script>
 
-        <!--||I'd read the documentation for 3.js rather than try this code||-->
-        <script   type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
-        <script  type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
-        <script  type="text/javascript" src="../3rd/colorPicker.js"></script>
-        <script  type="text/javascript" src="../3rd/three.min.js"></script>
-        <script  type="text/javascript" src="../gradientui/gradientui.js"></script>
-        <script>
-    </script>
-
-
-        <script   type  = "text/javascript" src ="../grayscott/grayscott.js"> </script>
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
 
 
@@ -47,9 +56,22 @@
             uniform float screenWidth;
             uniform float screenHeight;
             uniform sampler2D tSource;
-            uniform float delta;  // ||This is equivalent to dt in the forward euler.||
+            uniform float delta;  // ||This is  equivalent to dt in the forward euler.||
+
+            // What WILL be the diffusion ratios
             uniform float feed;
             uniform float kill;
+
+            // Kinetic parameters TODO
+            uniform float kinA;
+            uniform float kinB;
+            uniform float kinC;
+            uniform float kinD;
+            
+            // Length scales TODO
+            uniform float Lx;
+            uniform float Ly;
+
             uniform vec2 brush;
             // ||GLSL DOESNT CARE FOR STRINGS||
             vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
@@ -186,31 +208,25 @@
             });
         </script>
     </head>
+    <h1>Reaction diffusion system (Gray-Scott model)</h1>
+   <!-- Nastyish function to produce latex in headers. Isn't very clever though. -->
+    <body onload = "katex.render('\\frac{\\partial u}{\\partial t} = D_1 \\Delta u + ' + document.getElementById('F').value,functionSolveF);
+                    katex.render('\\frac{\\partial u}{\\partial t} = D_2 \\Delta v + ' + document.getElementById('G').value,functionSolveG)">
 
-   
-    <body>
-        <header>
-
-            <h1>Reaction diffusion system (Gray-Scott model)</h1>
-            <h2 id = "functionInfo">Where we solve:<br>
-                \frac{\partial u}{\partial t} = /document.getElementById('F')<br>
-                \frac{\partial v}{\partial t} = /document.getElementById('G')
-                                </h2>
-        </header>
         <div id="simulation">
         <canvas id="myCanvas" class="viewer" style="width:1024px;height:512 px"></canvas>
 
         <aside class="panel">
-            <section id="instructions">
+            <!-- <section id="instructions">
                 <header><h4>Instructions</h4></header>
                 <ol>
                     <li>Paint some strokes on the canvas.</li>
                     <li>Choose the evolution settings with the controls below.</li>
                     <li>Watch the evolution.</li>
                 </ol>
-            </section>
+            </section> -->
             <section id="controls">
-                <!--header><h4>Controls</h4></header-->
+                <h4>Controls (Irrelevant)</h4>
                 <!-- ||Gonna copy this for future option styles.|| -->
                 <form name="ex">
                     Presets:
@@ -246,27 +262,81 @@
                 Diffusion constant 2:
                 <span class ="remark" id="diminishment"></span><br/>
                 <div id="sld_diminishment" class="slider"></div>
+
+
                 <!-- '################################################### -->
 
+
+
+                <!-- ######################################################################## -->
+
                 <!-- ||Places the text box and calls the getVal function|| -->
-                <label for="name">f(u,v) = </label> 
-                <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
+
                 <!-- //////////////////////////////////////////// -->
                     <br><br>
-                <label for="name">g(u,v) = </label> 
-                <input id = 'G' type="text" value="u*v*v - 0.097*v" onblur="getVal()" src = "grayscott.js">
-                <input type = 'button' value = "GO! " onclick = "Change()" >
-                <br>
 
+                    <br>
+
+
+                    <form>
+                        <p>
+                            <label for="name">\(f(u,v)  \)</label> 
+                            <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
+
+                        </p>
+
+                        <p>
+
+                            <label for="name">\(g(u,v) \)</label> 
+                            <input id = 'G' type="text" value="u*v*v - 0.097*v" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
+                        </p>
+
+                                        <!-- Variable time step -->
+                        <p>
+
+                        <label for="name">\(\Delta t \)<label> 
+                            <input id = 'dt' type="number" value="0.8" onblur="getVal()" src = "grayscott.js"> </p>
+
+
+            
+                                            <!-- Kinetic constants -->
+                                            <p>
+                            <label for="name">Kinetic A</label> 
+                            <input id = 'KinA' type="number" value="Currently does nothing" onblur="getVal()" src = "grayscott.js"> 
+                                            </p>
+                                            <p>
+                            <label for="name">Kinetic B</label> 
+                            <input id = 'KinB' type="number" value="" onblur="getVal()" src = "grayscott.js">
+                                            </p>
+                                            <p>
+                            <label for="name">Kinetic C</label> 
+                            <input id = 'KinC' type="number" value="" onblur="getVal()" src = "grayscott.js">
+                                                </p>
+            
+                      </form>
+
+
+                
+         
                 
 
                 Colors:
                 <div id="gradient" style=""></div>
                 <div style="font-size:x-small">Share (paste and press enter):</div>
                 <div style="text-align:center"><input id="share" style="width:85%"/></div>
+
+                
             </section>
         </aside>
         </div>
+
+        <!-- Header IDS for the Katex maths to be injected -->
+        <header>
+            <h2 id = "functionInfo">Where we solve:</h2>
+            <h3 id = "functionSolveF"></h3>
+            <h3 id = "functionSolveG"></h3>
+        </header>
         <footer>
                 <div id="copyright">
                         &copy;2012

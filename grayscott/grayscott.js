@@ -45,8 +45,8 @@ var presets = [
     { // Default
         //feed: 0.018,
         //kill: 0.051
-        feed: 0.037,
-        kill: 0.06
+        feed: 0.27,
+        kill: 0.1
     },
     { // Solitons
         feed: 0.03,
@@ -96,40 +96,16 @@ var presets = [
 
 
 
-//||Function to take text input||
-
-function getVal() {
-    const val = document.querySelector('input').value;
-    return val 
-  }
-  ////////////////////////////////////////////////////////////
-
-
-  // ||Function to convert userinput function into the shader stuff||
-  function functoshader(){
-    var fstr = document.getElementById('F').value; // String of user input from f(x,y)
-    var gstr = document.getElementById('G').value; // String of user input from g(x,y)
-
-    // Changes instances of x,y to uv.r,uv.g for use in shader language for f(x,y). This is spaghetti
-    var fstr1 = fstr.replace(/x/g, "uv.r"); 
-    var FSTR = fstr1.replace(/y/g, "uv.g");
-
-    var gstr1 = gstr.replace(/x/g, "uv.r"); 
-    var GSTR = gstr1.replace(/y/g, "uv.g");
-
-    return [FSTR,GSTR]
-
-}
-////////////////////////////////////////////////////////////////
 
 // Configuration.
 var feed = presets[0].feed;
 var kill = presets[0].kill;
 
 
-init = function() // 
+init = function() 
 
-{
+{//////////////////////////////////////////////////////////////////////////////////////////
+    //This block generates the materials used for the canvas and the constants in the pde
     init_controls();
 
     canvasQ = $('#myCanvas');
@@ -139,22 +115,29 @@ init = function() //
     canvas.onmouseup = onMouseUp;
     canvas.onmousemove = onMouseMove;
 
-    //Might be the magic line to changeeeeeeee
     mRenderer = new THREE.WebGLRenderer({canvas: canvas, preserveDrawingBuffer: true});
 
     mScene = new THREE.Scene();
+    //Camera always appears a 'fixed' distance away from canvas
     mCamera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
     mCamera.position.z = 100; 
 
     mScene.add(mCamera);
 
+    //Contains the constants that communicates with the gsFragmentscript
+    //this will be useful for the nondimensionalisation
     mUniforms = {
         screenWidth: {type: "f", value: undefined},
         screenHeight: {type: "f", value: undefined},
         tSource: {type: "t", value: undefined},
-        delta: {type: "f", value: 1.0},
+        delta: {type: "f", value: undefined},
         feed: {type: "f", value: feed},
         kill: {type: "f", value: kill},
+
+
+        //Adding this fucks up the code (probably because its value isnt set anywhere)
+        //kinA: {type: "f", value: undefined},
+
         brush: {type: "v2", value: new THREE.Vector2(-10, -10)},
         color1: {type: "v4", value: new THREE.Vector4(0, 0, 0.0, 0)},
         color2: {type: "v4", value: new THREE.Vector4(0, 1, 0, 0.2)},
@@ -183,17 +166,19 @@ init = function() //
 
     var plane = new THREE.PlaneGeometry(1.0, 1.0);
     mScreenQuad = new THREE.Mesh(plane, mScreenMaterial);
+
+    //after defining geometry,mesh and material we then add it to the scene
     mScene.add(mScreenQuad);
 
     mColorsNeedUpdate = true;
 
-    //||I think this is just boiler plate stuff||
+
     resize(canvas.clientWidth, canvas.clientHeight);
 
     //THIS IS HOW THE INITIAL RENDER BEGINS
     render(0);
     //This is the initial 'spot location' in (x,y)
-    mUniforms.brush.value = new THREE.Vector2(0.25, 0.25);
+    mUniforms.brush.value = new THREE.Vector2(0.5, 0.5);
     mLastTime = new Date().getTime();
     requestAnimationFrame(render);
 }
@@ -221,6 +206,7 @@ var resize = function(width, height)
                          magFilter: THREE.LinearFilter,
                          format: THREE.RGBAFormat,
                          type: THREE.FloatType});
+    //Depreciated code but allows for the vertical and horizontal wrapping                     
     mTexture1.wrapS = THREE.RepeatWrapping;
     mTexture1.wrapT = THREE.RepeatWrapping;
     mTexture2.wrapS = THREE.RepeatWrapping;
@@ -229,13 +215,25 @@ var resize = function(width, height)
     mUniforms.screenWidth.value = canvasWidth/2;
     mUniforms.screenHeight.value = canvasHeight/2;
 }
-
-//The most important part here
+//////////////////////////////////////////////////////////////////////////////////////////////
+//The Rendering block
 var render = function(time)
 {
-    var dt = (time - mLastTime)/20.0;
+
+    // // //if (user input){
+    //     dt = get(userinput)}
+    //     else
+
+    var dt = (time - mLastTime)/2;
+
+ //If not then go to the 'default' value of dt
     if(dt > 0.8 || dt<=0)
         dt = 0.8;
+           
+    if(document.getElementById('alterself').onclick) //Check when GO! is pressed
+        dt = document.getElementById('dt').value //Set the value of dt to the value in the box
+
+    //console.log(dt)
     mLastTime = time;
 
 
@@ -248,12 +246,16 @@ var render = function(time)
 
 
     mScreenQuad.material = mGSMaterial;
+    //Important lines useful in changing the timestep/parameters in real time
     mUniforms.delta.value = dt;
     mUniforms.feed.value = feed;
     mUniforms.kill.value = kill;
 
+    //mUniforms.kinA.value = feed;
+
     for(var i=0; i<8; ++i)
     {
+        //Two cases for when mouse is pressed or not.
         if(!mToggled)
         {
             mUniforms.tSource.value = mTexture1;
@@ -275,11 +277,13 @@ var render = function(time)
         updateUniformsColors();
 
     mScreenQuad.material = mScreenMaterial;
+    //Rendering requires scene and camera/projection
     mRenderer.render(mScene, mCamera);
 
     requestAnimationFrame(render);
 }
-
+///////////////////////////////////////////////////////////////
+//This block is responsible for most of the UI (namely the panel)
 loadPreset = function(idx)
 {
     feed = presets[idx].feed;
@@ -287,6 +291,7 @@ loadPreset = function(idx)
     worldToForm();
 }
 
+//Updates colours on canvas according to colour slider in the panel.
 var updateUniformsColors = function()
 {
     var values = $("#gradient").gradient("getValuesRGBS");
@@ -353,11 +358,13 @@ snapshot = function()
 
 // resize canvas to fullscreen, scroll to upper left
 // corner and try to enable fullscreen mode and vice-versa
+
+//Alex here: Possibly a pointless feature - doesn't allow for wrapping.
 fullscreen = function() {
 
     var canv = $('#myCanvas');
     var elem = canv.get(0);
-
+    
     if(isFullscreen())
     {
         // end fullscreen
@@ -436,7 +443,8 @@ var init_controls = function()
     $("#sld_diminishment").slider("value", kill);
 
     //###############################################
-
+    //Looks like some Jquery nonsense I don't know.
+    //Gives a name to all the buttons - could change.
     $('#share').keypress(function (e) {
         if (e.which == 13) {
             parseShareString();
@@ -463,14 +471,16 @@ var init_controls = function()
     $("#requirement_dialog").dialog({
         autoOpen: false
     });
+
 }
+
 //Error handling for the share button at the buttom
 alertInvalidShareString = function()
 {
     $("#share").val("Invalid string!");
     setTimeout(updateShareString, 1000);
 }
-
+//Rejex shit or something
 parseShareString = function()
 {
     var str = $("#share").val();
@@ -533,133 +543,5 @@ updateShareString = function()
 
 })();
 
-////////////////////////NEW FUNCTIONS
-///////////////////////////////////////////////////////////// The block to get button working
-    
-//Gets the users input from the box
-function getVal(){
-    const val = document.querySelector('input').value;
-    return val;
-}
-
-//Converts user input into shader script
-function functoshader(){
-var fstr = document.getElementById('F').value; // String of user input from f(x,y)
-var gstr = document.getElementById('G').value; // String of user input from g(x,y)
-
-// Changes instances of u,v to uv.r,uv.g for use in shader language for f(u,v). This is spaghetti
-var fstr1 = fstr.replace(/u/g, `x`); 
-var fstr2 = fstr1.replace(/v/g, `y`);
-
-var FSTR1 = fstr2.replace(/x/g, 'uv.r');
-var FSTR = FSTR1.replace(/y/g, 'uv.g')
-
-
-var gstr1 = gstr.replace(/u/g, `x`); 
-var gstr2 = gstr1.replace(/v/g, `y`);
-
-var GSTR1 = gstr2.replace(/x/g, 'uv.r');
-var GSTR = GSTR1.replace(/y/g, 'uv.g')
-
-
-return [FSTR,GSTR]
-
-}
-
-
-function insertHTML(html, dest, append=false){
-// if no append is requested, clear the target element
-if(!append) dest.innerHTML = '';
-// create a temporary container and insert provided HTML code
-let container = document.createElement('div');
-container.innerHTML = html;
-// cache a reference to all the scripts in the container
-let scripts = container.querySelectorAll('script');
-// get all child elements and clone them in the target element
-let nodes = container.childNodes;
-for( let i=0; i< nodes.length; i++) dest.appendChild( nodes[i].cloneNode(true) );
-// force the found scripts to execute...
-for( let i=0; i< scripts.length; i++){
-    let script = document.createElement('script');
-    script.type = scripts[i].type || 'text/javascript';
-    if( scripts[i].hasAttribute('src') ) script.src = scripts[i].src;
-    script.innerHTML = scripts[i].innerHTML;
-    document.head.appendChild(script);
-    document.head.removeChild(script);
-}
-// done!
-return true;
-}
-
-function Change() {
-    flag = true;
-    if(flag = true){
-        insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
-    }
-    return flag;
-
-}
-
-function stringscript(){
-                        
-    var fFunc = functoshader()[0];
-    var gFunc = functoshader()[1];
-    // The script that we want to inject into the new body
-    var script = `
-    varying vec2 vUv;
-    uniform float screenWidth;
-    uniform float screenHeight;
-    uniform sampler2D tSource;
-    uniform float delta;  // ||This is equivalent to dt in the forward euler.||
-    uniform float feed;
-    uniform float kill;
-    uniform vec2 brush;
-    // ||GLSL DOESNT CARE FOR STRINGS||
-    vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
-
-    // ||This is equivalent to dx and dy.||
-    float step_x = 1.0/screenWidth;
-    float step_y = 1.0/screenHeight; 
-    void main()
-    {
-        if(brush.x < -5.0)
-        {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            return;
-        }
-        
-        //float feed = vUv.y * 0.083;
-        //float kill = vUv.x * 0.073;
-        
-
-
-        //|| the euler step TODO:||
-
-        vec2 uv = texture2D(tSource, vUv).rg;
-        vec2 uv0 = texture2D(tSource, vUv+vec2(-step_x, 0.0)).rg;
-        vec2 uv1 = texture2D(tSource, vUv+vec2(step_x, 0.0)).rg;
-        vec2 uv2 = texture2D(tSource, vUv+vec2(0.0, -step_y)).rg;
-        vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
-        
-        vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
-
-                            //  ||Diffusion coefficients|| (And Forward Euler)||                  
-        float du = /*0.00002*/feed*lapl.r + ${fFunc}; 
-        float dv = /*0.00001*/kill*lapl.g  + ${gFunc};
-        vec2 dst = uv + delta*vec2(du, dv);
-        
-        if(brush.x > 0.0) 
-        {
-            vec2 diff = (vUv - brush)/texel;
-            float dist = dot(diff, diff);
-            if(dist < 5.0)
-                dst.g = 0.9;
-        }
-         
-        gl_FragColor = vec4(dst.r, dst.g, 0.0, 1.0);
-    }`
-    return script
-
-}
 
 
