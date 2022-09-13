@@ -2,7 +2,8 @@
 
 
 
-
+//This line breaks some of the code but I don't know whether I should remove it
+//const { default: katex } = require("katex");
 ///////////////////////////////////////////////////////////// The block to get button working
     
 //Gets the users input from the box
@@ -15,7 +16,7 @@ function getVal(){
 //get input from boxes
 //convert to string
 //convert it to something resembling latex
-//inject it
+//inject it 
 // hope the try/catch stuff is done beforehand
 //
 
@@ -51,6 +52,18 @@ function functoshader(str){
 // }
 
 
+function ShowHide(id){
+    //id is basically document.getElementbyId(id)
+    var x = id;
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+
+
+
 function insertHTML(html, dest, append=false){
 // if no append is requested, clear the target element
 if(!append) dest.innerHTML = '';
@@ -79,12 +92,16 @@ function Change() {
 
     insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
     
-    var Fval = 'D_1 * nabla^2 (u) + ' + document.getElementById('F').value;
-    var Gval = 'D_2 * nabla^2 (v) + ' + document.getElementById('G').value;
-    insertHTML(`Where we solve:<br>
-                du/dt = ${Fval}<br>
-                dv/dt = ${Gval}`, 
-                document.getElementById('functionInfo'))
+
+    //Changes the pretty math function stuff
+    var Fval = '\\frac{\\partial u}{\\partial t} = D_1 \\Delta u +' + document.getElementById('F').value;
+    var Gval = '\\frac{\\partial u}{\\partial t} = D_1 \\Delta u +' + document.getElementById('G').value;
+    katex.render(Fval,functionSolveF)
+    katex.render(Gval,functionSolveG)
+    // //insertHTML(`Where we solve:<br>
+    //             du/dt = ${Fval}<br>
+    //             dv/dt = ${Gval}`, 
+    //             document.getElementById('functionInfo'))
     
     return true;
 
