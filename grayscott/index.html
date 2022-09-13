@@ -24,6 +24,7 @@
         <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../3rd/colorPicker.js"></script>
         <script type="text/javascript" src="../3rd/three.min.js"></script>
+        
         <script type="text/javascript" src="../gradientui/gradientui.js"></script>
         <script type = "text/javascript" src = "grayscott.js"></script>
         <script type = "text/javascript" src = "minimain.js"></script>
@@ -59,6 +60,7 @@
             uniform float delta;  // ||This is  equivalent to dt in the forward euler.||
 
             // What WILL be the diffusion ratios
+            //Still need to be renamed from feed and kill
             uniform float feed;
             uniform float kill;
 
@@ -68,12 +70,12 @@
             uniform float kinC;
             uniform float kinD;
             
-            // Length scales TODO
+            // Length scales TODO (if necessary)
             uniform float Lx;
             uniform float Ly;
 
             uniform vec2 brush;
-            // ||GLSL DOESNT CARE FOR STRINGS||
+            // ||GLSL only takes vectors||
             vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
 
             // ||This is equivalent to dx and dy.||
@@ -208,10 +210,21 @@
             });
         </script>
     </head>
+    <div class="navbar">
+        <a class="active" href="#">Reaction diffusion system</a>
+        <a href="#">A page</a>
+        <a href="#">Another!!</a>
+      </div>
     <h1>Reaction diffusion system (Gray-Scott model)</h1>
+
+    <header>
+        <h2 id = "functionInfo">Where we solve:</h2>
+        <h3 id = "functionSolveF"></h3>
+        <h3 id = "functionSolveG"></h3>
+    </header>
    <!-- Nastyish function to produce latex in headers. Isn't very clever though. -->
     <body onload = "katex.render('\\frac{\\partial u}{\\partial t} = D_1 \\Delta u + ' + document.getElementById('F').value,functionSolveF);
-                    katex.render('\\frac{\\partial u}{\\partial t} = D_2 \\Delta v + ' + document.getElementById('G').value,functionSolveG)">
+                    katex.render('\\frac{\\partial v}{\\partial t} = D_2 \\Delta v + ' + document.getElementById('G').value,functionSolveG)">
 
         <div id="simulation">
         <canvas id="myCanvas" class="viewer" style="width:1024px;height:512 px"></canvas>
@@ -252,20 +265,16 @@
                     <button id="btn_fullscreen" onclick="fullscreen()">Fullscreen mode</button>
                 <p/>
 
-                <h4 class="unsafe">Advanced settings</h4>
+
                 <!-- ############################################### Commented out feed/death rates -->
-                Diffusion constant 1:
+                Diffusion constant 1 \(D_1\):
                 <span class="remark" id="replenishment"></span><br/>
                 <div id="sld_replenishment" class="slider"></div>
 
                 
-                Diffusion constant 2:
+                Diffusion constant 2 \(D_2\):
                 <span class ="remark" id="diminishment"></span><br/>
                 <div id="sld_diminishment" class="slider"></div>
-
-
-                <!-- '################################################### -->
-
 
 
                 <!-- ######################################################################## -->
@@ -273,12 +282,10 @@
                 <!-- ||Places the text box and calls the getVal function|| -->
 
                 <!-- //////////////////////////////////////////// -->
-                    <br><br>
-
-                    <br>
 
 
-                    <form>
+
+                    <form id = 'BasicSettings'>
                         <p>
                             <label for="name">\(f(u,v)  \)</label> 
                             <input id = 'F' type="text" value="-u*v*v + 0.037*(1.0 - u)" onblur="getVal()" src = "grayscott.js">
@@ -290,20 +297,25 @@
                             <label for="name">\(g(u,v) \)</label> 
                             <input id = 'G' type="text" value="u*v*v - 0.097*v" onblur="getVal()" src = "grayscott.js">
                             <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
-                        </p>
-
-                                        <!-- Variable time step -->
+                        </p>        
                         <p>
+                        </form>
+                            <!-- On click the advanced settings shows/hides the things like timestep, kinetic parameters etc -->
+                            <h4 class="unsafe" onClick = "ShowHide(document.getElementById('Advanced'))"  src = "minimain.js">Advanced settings(make it obvious this is clickable)</h4>
+                        
 
+                        <form id = Advanced>
+                            <!-- Variable time step. -->
                         <label for="name">\(\Delta t \)<label> 
-                            <input id = 'dt' type="number" value="0.8" onblur="getVal()" src = "grayscott.js"> </p>
+                            <!-- Allows for incrementing and minimum value is 0 -->
+                            <input id = 'dt' type="number" min = 0 step = 0.1 value="0.8" onblur="getVal()" src = "grayscott.js"> </p>
 
 
             
-                                            <!-- Kinetic constants -->
+                                            <!-- Kinetic constants TODO-->
                                             <p>
                             <label for="name">Kinetic A</label> 
-                            <input id = 'KinA' type="number" value="Currently does nothing" onblur="getVal()" src = "grayscott.js"> 
+                            <input id = 'KinA' type="number" value="1/0" onblur="getVal()" src = "grayscott.js"> 
                                             </p>
                                             <p>
                             <label for="name">Kinetic B</label> 
@@ -313,7 +325,6 @@
                             <label for="name">Kinetic C</label> 
                             <input id = 'KinC' type="number" value="" onblur="getVal()" src = "grayscott.js">
                                                 </p>
-            
                       </form>
 
 
@@ -332,11 +343,7 @@
         </div>
 
         <!-- Header IDS for the Katex maths to be injected -->
-        <header>
-            <h2 id = "functionInfo">Where we solve:</h2>
-            <h3 id = "functionSolveF"></h3>
-            <h3 id = "functionSolveG"></h3>
-        </header>
+
         <footer>
                 <div id="copyright">
                         &copy;2012
