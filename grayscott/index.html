@@ -215,18 +215,19 @@
         <a href="#">A page</a>
         <a href="#">Another!!</a>
       </div>
-    <h1>Reaction diffusion system (Gray-Scott model)</h1>
+   <!-- <marquee> <h1>Reaction diffusion system (Gray-Scott model)</h1></marquee> -->
 
+   <!-- This becomes the space where we insert the latex to display the diffy qs -->
     <header>
         <h2 id = "functionInfo">Where we solve:</h2>
         <h3 id = "functionSolveF"></h3>
         <h3 id = "functionSolveG"></h3>
     </header>
-   <!-- Nastyish function to produce latex in headers. Isn't very clever though. -->
+   <!-- Nastyish function to produce latex in headers. Isn't very clever though. Also hides the advanced settings on page load -->
     <body onload = "katex.render('\\frac{\\partial u}{\\partial t} = D_1 \\Delta u + ' + document.getElementById('F').value,functionSolveF);
                     katex.render('\\frac{\\partial v}{\\partial t} = D_2 \\Delta v + ' + document.getElementById('G').value,functionSolveG)">
 
-        <div id="simulation">
+        <div id = "simulation">
         <canvas id="myCanvas" class="viewer" style="width:1024px;height:512 px"></canvas>
 
         <aside class="panel">
@@ -282,8 +283,6 @@
                 <!-- ||Places the text box and calls the getVal function|| -->
 
                 <!-- //////////////////////////////////////////// -->
-
-
 
                     <form id = 'BasicSettings'>
                         <p>
