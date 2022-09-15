@@ -16,9 +16,8 @@
         <!-- To automatically render math in text elements, include the auto-render extension: -->
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
             onload="renderMathInElement(document.body);"></script>
+
         <!-- ####################################################################### -->
-
-
         <link type="text/css" href="../3rd/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
         <script type="text/javascript" src="../3rd/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../3rd/jquery-ui-1.8.16.custom.min.js"></script>
@@ -64,11 +63,11 @@
             uniform float feed;
             uniform float kill;
 
-            // Kinetic parameters TODO
-            uniform float kinA;
-            uniform float kinB;
-            uniform float kinC;
-            uniform float kinD;
+            // Kinetic parameters DONE
+            uniform float KA;
+            uniform float KB;
+            uniform float KC;
+            uniform float KD;
             
             // Length scales TODO (if necessary)
             uniform float Lx;
@@ -217,7 +216,8 @@
       </div>
    <!-- <marquee> <h1>Reaction diffusion system (Gray-Scott model)</h1></marquee> -->
 
-   <!-- This becomes the space where we insert the latex to display the diffy qs -->
+
+              <!-- Header IDS for the Katex Diffy Qs to be injected -->
     <header>
         <h2 id = "functionInfo">Where we solve:</h2>
         <h3 id = "functionSolveF"></h3>
@@ -247,12 +247,12 @@
                     <select name="scene" style="width:100%"
                         onchange="loadPreset(document.ex.scene.selectedIndex)">
                         <option value="0" selected="selected">Default</option>
-                        <option value="1">Solitons</option>
-                        <option value="2">Pulsating solitons</option>
-                        <option value="3">Worms</option>
-                        <option value="4">Mazes</option>
-                        <option value="5">Holes</option>
-                        <option value="6">Chaos</option>
+                        <option value="1">Schnakenberg (Spots)</option>
+                        <option value="2">Schakenberg (Labyrinthine)</option>
+                        <option value="3">Gierer - Meinhardt</option>
+                        <option value="4">Thomas (Spots)</option>
+                        <option value="5">Thomas (Labyrinthine)</option>
+                        <option value="6">FitzHugh-Nagumo</option>
                         <option value="7">Chaos and holes</option>
                         <option value="8">Moving spots</option>
                         <option value="9">Spots and loops</option>
@@ -311,18 +311,18 @@
 
 
             
-                                            <!-- Kinetic constants TODO-->
+                                            <!-- Kinetic constants DONE-->
                                             <p>
-                            <label for="name">Kinetic A</label> 
-                            <input id = 'KinA' type="number" value="1/0" onblur="getVal()" src = "grayscott.js"> 
+                            <label for="name">Kinetic \(a\)</label> 
+                            <input id = 'KineticA' type="number" step = 0.1 value="" onblur="getVal()" src = "grayscott.js"> 
                                             </p>
                                             <p>
-                            <label for="name">Kinetic B</label> 
-                            <input id = 'KinB' type="number" value="" onblur="getVal()" src = "grayscott.js">
+                            <label for="name">Kinetic \(b\)</label> 
+                            <input id = 'KineticB' type="number" step = 0.1 value="" onblur="getVal()" src = "grayscott.js">
                                             </p>
                                             <p>
-                            <label for="name">Kinetic C</label> 
-                            <input id = 'KinC' type="number" value="" onblur="getVal()" src = "grayscott.js">
+                            <label for="name">Kinetic \(c\)</label> 
+                            <input id = 'Kinetic C' type="number" step = 0.1 value="" onblur="getVal()" src = "grayscott.js">
                                                 </p>
                       </form>
 
@@ -341,7 +341,7 @@
         </aside>
         </div>
 
-        <!-- Header IDS for the Katex maths to be injected -->
+
 
         <footer>
                 <div id="copyright">
