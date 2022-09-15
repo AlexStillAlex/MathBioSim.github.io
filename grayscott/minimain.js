@@ -129,7 +129,7 @@ function stringscript(){
     uniform float kill;
     uniform vec2 brush;
 
-    // Kinetic parameters TODO
+    // Kinetic parameters DONE
     uniform float KA;
     uniform float KB;
     uniform float KC;
