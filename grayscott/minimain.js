@@ -26,10 +26,17 @@ function getVal(){
 function functoshader(str){
     var str1 = str.replace(/u/g, `x`); //replaces all instances of (u,v) with (uv.r,uv.g)
     var str2 = str1.replace(/v/g, `y`);
-
-
     var STR1 = str2.replace(/x/g, 'uv.r');
     var STR = STR1.replace(/y/g, 'uv.g');
+
+
+    //This deals with the kinetic constants 'a' 'b' 'c'
+    if(STR.includes('a') || STR.includes('b') || STR.includes('c')){
+        STR = STR.replace(/a/g, 'KA');
+        STR = STR.replace(/b/g, 'KB');
+        STR = STR.replace(/c/g, 'KC');
+
+    }
 
     return STR
 } //This is an improvement on the code below.
@@ -121,6 +128,13 @@ function stringscript(){
     uniform float feed;
     uniform float kill;
     uniform vec2 brush;
+
+    // Kinetic parameters TODO
+    uniform float KA;
+    uniform float KB;
+    uniform float KC;
+    uniform float KD;
+
     // ||GLSL DOESNT CARE FOR STRINGS||
     vec2 texel = vec2(1.0/screenWidth, 1.0/screenHeight);
 

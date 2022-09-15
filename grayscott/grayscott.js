@@ -46,7 +46,10 @@ var presets = [
         //feed: 0.018,
         //kill: 0.051
         feed: 0.27,
-        kill: 0.1
+        kill: 0.1,
+        KA: 1.0,
+        KB: 1.0,
+        KC: 1.0,
     },
     { // Solitons
         feed: 0.03,
@@ -135,8 +138,10 @@ init = function()
         kill: {type: "f", value: kill},
 
 
-        //Adding this fucks up the code (probably because its value isnt set anywhere)
-        //kinA: {type: "f", value: undefined},
+        //These initialise the kinetic constants
+        KA: {type: "f", value: undefined},
+        KB: {type: "f", value: undefined},
+        KC: {type: "f", value: undefined},
 
         brush: {type: "v2", value: new THREE.Vector2(-10, -10)},
         color1: {type: "v4", value: new THREE.Vector4(0, 0, 0.0, 0)},
@@ -220,15 +225,11 @@ var resize = function(width, height)
 var render = function(time)
 {
 
-    // // //if (user input){
-    //     dt = get(userinput)}
-    //     else
-
     var dt = (time - mLastTime)/2;
 
  //If not then go to the 'default' value of dt
-    if(dt > 0.8 || dt<=0)
-        dt = 0.8;
+    // if(dt > 0.8 || dt<=0)
+    //     dt = 0.8;
            
     if(document.getElementById('alterself').onclick) //Check when GO! is pressed
         dt = document.getElementById('dt').value //Set the value of dt to the value in the box
@@ -250,8 +251,10 @@ var render = function(time)
     mUniforms.delta.value = dt;
     mUniforms.feed.value = feed;
     mUniforms.kill.value = kill;
-
-    //mUniforms.kinA.value = feed;
+    //This updates the kinetic constants according to the User input
+    mUniforms.KA.value = document.getElementById('KineticA').value;
+    mUniforms.KB.value = document.getElementById('KineticA').value;
+    mUniforms.KC.value = document.getElementById('KineticA').value;
 
     for(var i=0; i<8; ++i)
     {
