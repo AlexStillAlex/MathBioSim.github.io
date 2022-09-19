@@ -4,6 +4,8 @@
 
 //This line breaks some of the code but I don't know whether I should remove it
 //const { default: katex } = require("katex");
+
+
 ///////////////////////////////////////////////////////////// The block to get button working
     
 //Gets the users input from the box
@@ -12,22 +14,52 @@ function getVal(){
     return val;
 }
 
-//TODO: text to maths function
-//get input from boxes
-//convert to string
-//convert it to something resembling latex
-//inject it 
-// hope the try/catch stuff is done beforehand
-//
+
+//A&A this bit gets messy so heres an explanation
+
+//BLOCK 1:
+//BLOCK 2:
+//BLOCK 3:
 
 //Converts user input into shader script
+function functoshader(STR){
+//BLOCK 1:
+    for (var i = 0; i < STR.length; i++) {//x^y --> pow(x,y)
+        if(STR[i] == '^'){
+            //This creates the pow(x,y) string
+            var replace = 'pow' + '(' + STR[i-1] + ',' + STR[i+1] +  ')';
+            //Remove the adjacent characters
+            STR = STR.substring(0,i-1) + '^' + STR.substring(i+2,STR.length);
+            //End up with x^y ---> pow(x,y)
+            STR = STR.replace('^',replace);
+        }
+      }
 
-//Takes string input
-function functoshader(str){
-    var str1 = str.replace(/u/g, `x`); //replaces all instances of (u,v) with (uv.r,uv.g)
-    var str2 = str1.replace(/v/g, `y`);
-    var STR1 = str2.replace(/x/g, 'uv.r');
-    var STR = STR1.replace(/y/g, 'uv.g');
+
+      //BLOCK 2:
+      //Adam and Andrew I don't know how to explain this regex
+      //I'm just going to link the Stackoverflow I stole it from:
+      //https://stackoverflow.com/questions/17374893/how-to-extract-floating-numbers-from-strings-in-javascript
+
+    var regex = /[+-]?\d+(\.\d+)?/g;
+    var ints = STR.match(regex).map(function(v) { return parseFloat(v); }); //Produces array of numbers from  input string
+    var stringints = STR.match(regex);  //Produces array of string of numbers from input string
+    for(var i = 0; i < stringints.length; i++){
+        //This line didn't do what I intended but it works so whatever
+        if(Number.isInteger(stringints[i]) == false){
+            //Replaces all numbers with their 5dp versions.
+      STR = STR.replace(stringints[i],ints[i].toFixed(5))
+      }
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //BLOCK 3:
+    var STR = STR.replace(/u/g, `x`); //replaces all instances of (u,v) with (uv.r,uv.g)
+    var STR = STR.replace(/v/g, `y`);
+    var STR = STR.replace(/x/g, 'uv.r');
+    var STR = STR.replace(/y/g, 'uv.g');
 
 
     //This deals with the kinetic constants 'a' 'b' 'c'
@@ -60,7 +92,7 @@ function functoshader(str){
 
 
 function ShowHide(id){
-    //id is basically document.getElementbyId(id)
+    //id is document.getElementbyId(id)
     var x = id;
     if (x.style.display === "none") {
       x.style.display = "block";
@@ -95,20 +127,21 @@ for( let i=0; i< scripts.length; i++){
 return true;
 }
 
+//This is what is called when GO! is pressed
 function Change() {
 
+    //Inserts the altered script into the shader
     insertHTML(stringscript(),document.getElementById('gsFragmentShader'))
     
 
     //Changes the pretty math function stuff
     var Fval = '\\frac{\\partial u}{\\partial t} = D_1 \\Delta u +' + document.getElementById('F').value;
     var Gval = '\\frac{\\partial u}{\\partial t} = D_1 \\Delta u +' + document.getElementById('G').value;
+
+    //This is in the katex documentation somewhere
     katex.render(Fval,functionSolveF)
     katex.render(Gval,functionSolveG)
-    // //insertHTML(`Where we solve:<br>
-    //             du/dt = ${Fval}<br>
-    //             dv/dt = ${Gval}`, 
-    //             document.getElementById('functionInfo'))
+   
     
     return true;
 

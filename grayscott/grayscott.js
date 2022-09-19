@@ -222,19 +222,15 @@ var resize = function(width, height)
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 //The Rendering block
+
 var render = function(time)
 {
 
     var dt = (time - mLastTime)/2;
-
- //If not then go to the 'default' value of dt
-    // if(dt > 0.8 || dt<=0)
-    //     dt = 0.8;
-           
+ 
     if(document.getElementById('alterself').onclick) //Check when GO! is pressed
         dt = document.getElementById('dt').value //Set the value of dt to the value in the box
 
-    //console.log(dt)
     mLastTime = time;
 
 
@@ -243,9 +239,6 @@ var render = function(time)
     mGSMaterial.needsUpdate = true;
 
     //#################################################
-
-
-
     mScreenQuad.material = mGSMaterial;
     //Important lines useful in changing the timestep/parameters in real time
     mUniforms.delta.value = dt;
@@ -253,12 +246,17 @@ var render = function(time)
     mUniforms.kill.value = kill;
     //This updates the kinetic constants according to the User input
     mUniforms.KA.value = document.getElementById('KineticA').value;
-    mUniforms.KB.value = document.getElementById('KineticA').value;
-    mUniforms.KC.value = document.getElementById('KineticA').value;
+    mUniforms.KB.value = document.getElementById('KineticB').value;
+    mUniforms.KC.value = document.getElementById('KineticC').value;
+
+    //TRY CATCH IN THE RENDERING LOOP
+try {
+    
 
     for(var i=0; i<8; ++i)
     {
         //Two cases for when mouse is pressed or not.
+ 
         if(!mToggled)
         {
             mUniforms.tSource.value = mTexture1;
@@ -274,8 +272,20 @@ var render = function(time)
 
         mToggled = !mToggled;
         mUniforms.brush.value = mMinusOnes;
+        }
+ 
     }
 
+    //This is a little bit slow on reload.
+    //Tells the user theres an error
+    //Reloads the page.
+    catch{
+        //alert('Howdy partner! Seems like you have typed in a banned expression. Try to use floats instead of integers');
+        //location.reload();
+        clean();
+        return false;
+    }
+    
     if(mColorsNeedUpdate)
         updateUniformsColors();
 
@@ -285,6 +295,8 @@ var render = function(time)
 
     requestAnimationFrame(render);
 }
+
+
 ///////////////////////////////////////////////////////////////
 //This block is responsible for most of the UI (namely the panel)
 loadPreset = function(idx)
@@ -483,7 +495,7 @@ alertInvalidShareString = function()
     $("#share").val("Invalid string!");
     setTimeout(updateShareString, 1000);
 }
-//Rejex shit or something
+//Interprets the share string in links
 parseShareString = function()
 {
     var str = $("#share").val();
