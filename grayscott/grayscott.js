@@ -182,6 +182,24 @@ init = function()
 
     //THIS IS HOW THE INITIAL RENDER BEGINS
     render(0);
+
+    console.log(`
+        ⢀⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆ 
+        ⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠁⠸⣼⡿ 
+        ⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉⠀⠀⠀⠀⠀ 
+        ⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀ 
+        ⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⠿⠿⠿⠛⠉
+            Get out of my swamp`);
     //This is the initial 'spot location' in (x,y)
     mUniforms.brush.value = new THREE.Vector2(0.5, 0.5);
     mLastTime = new Date().getTime();
@@ -280,8 +298,8 @@ try {
     //Tells the user theres an error
     //Reloads the page.
     catch{
-        //alert('Howdy partner! Seems like you have typed in a banned expression. Try to use floats instead of integers');
-        //location.reload();
+        alert('Howdy partner! Seems like you have typed in a banned expression. Try again');
+        location.reload();
         clean();
         return false;
     }
@@ -445,13 +463,13 @@ var init_controls = function()
 {//#######################################Very very very lazy implementation of adjusting diffusivity constants.
 
     $("#sld_replenishment").slider({
-        value: feed, min: 0, max:0.5, step:0.01,
+        value: feed, min: 0, max:10, step:0.01,
         change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
         slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
     });
     $("#sld_replenishment").slider("value", feed);
     $("#sld_diminishment").slider({
-        value: kill, min: 0, max:0.5, step:0.01,
+        value: kill, min: 0, max:10, step:0.01,
         change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
         slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
     });

@@ -23,7 +23,7 @@ function getVal(){
 
 //Converts user input into shader script
 function functoshader(STR){
-//BLOCK 1:
+//BLOCK 1: Only works for integers. The inbuilt pow(x,y) in GLSL only works for y >= 0
     for (var i = 0; i < STR.length; i++) {//x^y --> pow(x,y)
         if(STR[i] == '^'){
             //This creates the pow(x,y) string
@@ -42,8 +42,10 @@ function functoshader(STR){
       //https://stackoverflow.com/questions/17374893/how-to-extract-floating-numbers-from-strings-in-javascript
 
     var regex = /[+-]?\d+(\.\d+)?/g;
-    var ints = STR.match(regex).map(function(v) { return parseFloat(v); }); //Produces array of numbers from  input string
-    var stringints = STR.match(regex);  //Produces array of string of numbers from input string
+ //Produces array of numbers from  input string
+    var ints = STR.match(regex).map(function(v) { return parseFloat(v); }); 
+   //Produces array of string of numbers from input string
+    var stringints = STR.match(regex);  
     for(var i = 0; i < stringints.length; i++){
         //This line didn't do what I intended but it works so whatever
         if(Number.isInteger(stringints[i]) == false){
