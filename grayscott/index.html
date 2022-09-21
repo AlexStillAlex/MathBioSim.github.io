@@ -104,10 +104,13 @@
                 vec2 uv3 = texture2D(tSource, vUv+vec2(0.0, step_y)).rg;
                 
 
-                vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);//10485.76;
+                vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);
 
-                float du = /*0.00002*/feed*lapl.r - uv.r*pow(uv.g,2.0) + 0.037*(1.0 - uv.r);
-                float dv = /*0.00001*/kill*lapl.g + uv.r*pow(uv.g,2.0) - (0.097)*uv.g;
+
+                //This is f(u_n, v_n)
+                //Write a function somehow
+                float du = feed*lapl.r - uv.r*pow(uv.g,2.0) + 0.037*(1.0 - uv.r);
+                float dv = kill*lapl.g + uv.r*pow(uv.g,2.0) - (0.097)*uv.g;
 
 
 
@@ -118,11 +121,13 @@
                 //This is bollocks.
 
                 vec2 k1 = delta*vec2(du,dv);
+
+    
                 vec2 k2 = delta*vec2(du + 0.5*delta, dv + 0.5 *k1);
                 vec2 k3 = delta*vec2(du + 0.5*delta, dv + 0.5 * k2);
                 vec2 k4 = delta *vec2(du + delta, dv + k3);
 
-                vec2 dst = uv + 1.0/6.0 * k1 + 1.0/3.0 *k2 + 1.0/3.0 *k3 + 1.0/6.0 *k4;
+                vec2 dst = uv + 6.0/6.0 * k1;// + 1.0/3.0 *k2 + 1.0/3.0 *k3 + 1.0/6.0 *k4;
                 
                 if(brush.x > 0.0)
                 {
@@ -309,6 +314,7 @@
 
                             <label for="name">\(g(u,v) \)</label> 
                             <input id = 'G' type="text" value="u*v^2 - c*v" onblur="getVal()" src = "grayscott.js">
+                            <!-- The Button that changes everything -->
                             <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
                         </p>        
                         <p>

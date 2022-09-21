@@ -2,6 +2,18 @@
 
 
 
+//NOTe to self: CHeck intensity of points on grid
+//Map this to the colour bar by hexcode
+// correspond this to the value on the bar.
+
+
+
+
+
+
+
+
+
 //This line breaks some of the code but I don't know whether I should remove it
 //const { default: katex } = require("katex");
 
@@ -17,12 +29,18 @@ function getVal(){
 
 //A&A this bit gets messy so heres an explanation
 
-//BLOCK 1:
-//BLOCK 2:
-//BLOCK 3:
+//BLOCK 1: This converts user based maths into GLSL allowed maths. 
+//EG: The string: 'u + v^2 + 1' ---> 'u + pow(v,2) + 1'
+
+//BLOCK 2: Turns all integers into floats. Uses some regex I don't understand but it works.
+// EG: 'u + pow(v,2) + 1' ---> 'u + pow(v,2.00000) + 1.0000'
+
+//BLOCK 3: Takes the variables we have defined and changes them to their shader variants
+// EG: 'u + pow(v,2.00000) + 1.0000' ---> 'uv.r + pow(uv.g,2.00000) + 1.0000'
 
 //Converts user input into shader script
 function functoshader(STR){
+
 //BLOCK 1: Only works for integers. The inbuilt pow(x,y) in GLSL only works for y >= 0
     for (var i = 0; i < STR.length; i++) {//x^y --> pow(x,y)
         if(STR[i] == '^'){

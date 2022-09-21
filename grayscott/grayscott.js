@@ -551,7 +551,7 @@ parseShareString = function()
             alertInvalidShareString();
             return;
         }
-
+ 
         newValues.push(v);
     }
 

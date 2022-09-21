@@ -83,10 +83,10 @@
 
         this.moved = true;
     }
-    
+    //////////////////////////////////////////////////////////////////
     Dragger.prototype.setPosition = function(pos)
     {
-        pos = clamp(pos, 0.0, 1.0);
+        //pos = clamp(pos, 0.0, 1.0);
         var newleft = pos*this.width;
         
         this.$this.css("left", newleft);
@@ -146,7 +146,9 @@
         this.values = values;
         for (var i = values.length - 1; i >= 0; i--) {
             var v = values[i];
+            
             this.draggers[i].setPosition(v[0]);
+            
             this.draggers[i].setColor(v[1]);
         };
     }
