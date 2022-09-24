@@ -144,6 +144,7 @@ init = function()
         KC: {type: "f", value: undefined},
 
         brush: {type: "v2", value: new THREE.Vector2(-10, -10)},
+        // take a look at this
         color1: {type: "v4", value: new THREE.Vector4(0, 0, 0.0, 0)},
         color2: {type: "v4", value: new THREE.Vector4(0, 1, 0, 0.2)},
         color3: {type: "v4", value: new THREE.Vector4(1, 1, 0, 0.21)},
@@ -182,6 +183,24 @@ init = function()
 
     //THIS IS HOW THE INITIAL RENDER BEGINS
     render(0);
+
+    console.log(`
+        ⢀⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆ 
+        ⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠁⠸⣼⡿ 
+        ⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉⠀⠀⠀⠀⠀ 
+        ⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀ 
+        ⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⠿⠿⠿⠛⠉
+            Get out of my swamp`);
     //This is the initial 'spot location' in (x,y)
     mUniforms.brush.value = new THREE.Vector2(0.5, 0.5);
     mLastTime = new Date().getTime();
@@ -280,9 +299,9 @@ try {
     //Tells the user theres an error
     //Reloads the page.
     catch{
-        //alert('Howdy partner! Seems like you have typed in a banned expression. Try to use floats instead of integers');
-        //location.reload();
-        clean();
+        alert('Howdy partner! Seems like you have typed in something the GPU did not like. Try again');
+        location.reload();
+
         return false;
     }
     
@@ -292,7 +311,6 @@ try {
     mScreenQuad.material = mScreenMaterial;
     //Rendering requires scene and camera/projection
     mRenderer.render(mScene, mCamera);
-
     requestAnimationFrame(render);
 }
 
@@ -310,9 +328,11 @@ loadPreset = function(idx)
 var updateUniformsColors = function()
 {
     var values = $("#gradient").gradient("getValuesRGBS");
+    
     for(var i=0; i<values.length; i++)
     {
         var v = values[i];
+
         mColors[i].value = new THREE.Vector4(v[0], v[1], v[2], v[3]);
     }
 
@@ -445,13 +465,13 @@ var init_controls = function()
 {//#######################################Very very very lazy implementation of adjusting diffusivity constants.
 
     $("#sld_replenishment").slider({
-        value: feed, min: 0, max:0.5, step:0.01,
+        value: feed, min: 0, max:10, step:0.01,
         change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
         slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
     });
     $("#sld_replenishment").slider("value", feed);
     $("#sld_diminishment").slider({
-        value: kill, min: 0, max:0.5, step:0.01,
+        value: kill, min: 0, max:10, step:0.01,
         change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
         slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
     });
@@ -533,10 +553,10 @@ parseShareString = function()
             alertInvalidShareString();
             return;
         }
-
+ 
         newValues.push(v);
     }
-
+//Find GRADIENT alex
     $("#gradient").gradient("setValues", newValues);
     feed = newFeed;
     kill = newKill;

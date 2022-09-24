@@ -2,6 +2,9 @@
 (function($){
     
     var hexToRgb = function(hex) {
+        //A&A I have no clue how this works.
+        //Thankfully this website does!
+        //regexr.com/6ulpm
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
             r: parseInt(result[1], 16)/255.0,
@@ -83,10 +86,10 @@
 
         this.moved = true;
     }
-    
+    //////////////////////////////////////////////////////////////////
     Dragger.prototype.setPosition = function(pos)
-    {
-        pos = clamp(pos, 0.0, 1.0);
+    {   //Clamp(_) sets the minimum and maximum location the draggers can take onscreen.
+        //pos = clamp(pos, -1.0, 1.0);
         var newleft = pos*this.width;
         
         this.$this.css("left", newleft);
@@ -114,9 +117,10 @@
         
         this.gradientview = this.$this.children('.gradient-view:first');
         this.gradientview.width(this.width);
+        //He picked 21 for a reason. Change the number if you want a laugh.
         this.gradientview.height(this.height - 21);
         this.gradientview.css('position', 'absolute');
-        this.gradientview.css('left', 0);
+        this.gradientview.css('left', 1);
         
         this.canvas = this.gradientview.get(0);
         this.canvas.width = this.gradientview.width();
@@ -141,11 +145,15 @@
             this.callback.fn(this.callback.data);
     }
     
+    //This looks like the right idea. 
+    //Seems like its still using predetermined values from elsewhere in the function. Promising though.
     Gradient.prototype.setValues = function(values)
     {
         this.values = values;
+        //alert(values);
         for (var i = values.length - 1; i >= 0; i--) {
             var v = values[i];
+            
             this.draggers[i].setPosition(v[0]);
             this.draggers[i].setColor(v[1]);
         };
@@ -156,12 +164,12 @@
         this.updateValues();
         var values = this.values;
         
-        var lingrad = this.ctx.createLinearGradient(0, 0, this.canvas.width, 0);
+        var lingrad = this.ctx.createLinearGradient(0, 0, this.canvas.width + 10, 0);
         for(var i=0; i<values.length; i++)
             lingrad.addColorStop(values[i][0], values[i][1]);
         
         this.ctx.fillStyle = lingrad;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillRect(-1, 1, this.canvas.width, this.canvas.height);
     }
     
     Gradient.prototype.setUpdateCallback = function(callback, data)
@@ -190,13 +198,20 @@
             });
         },
         
+        //As the function states this only GETS the colourcodes from the gradient.
+        //Not useful in changing the values.
+        //In otherwords Alex: Your Gradient is in another castle!!
         getValuesRGBS : function() {
             
             var values = $(this).data("gradient").values;
+            //alert(values);
+            //Param: a is the value of the draggers initial location.
+            //Useful if you want to change it
             var valuesRGBS = values.map(function(a){
                 var rgb = hexToRgb(a[1]);
                 return [rgb.r, rgb.g, rgb.b, a[0]]
             });
+            
             return valuesRGBS;
         },
         

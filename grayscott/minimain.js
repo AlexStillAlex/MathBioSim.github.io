@@ -2,6 +2,18 @@
 
 
 
+//NOTe to self: CHeck intensity of points on grid
+//Map this to the colour bar by hexcode
+// correspond this to the value on the bar.
+
+
+
+
+
+
+
+
+
 //This line breaks some of the code but I don't know whether I should remove it
 //const { default: katex } = require("katex");
 
@@ -17,13 +29,19 @@ function getVal(){
 
 //A&A this bit gets messy so heres an explanation
 
-//BLOCK 1:
-//BLOCK 2:
-//BLOCK 3:
+//BLOCK 1: This converts user based maths into GLSL allowed maths. 
+//EG: The string: 'u + v^2 + 1' ---> 'u + pow(v,2) + 1'
+
+//BLOCK 2: Turns all integers into floats. Uses some regex I don't understand but it works.
+// EG: 'u + pow(v,2) + 1' ---> 'u + pow(v,2.00000) + 1.0000'
+
+//BLOCK 3: Takes the variables we have defined and changes them to their shader variants
+// EG: 'u + pow(v,2.00000) + 1.0000' ---> 'uv.r + pow(uv.g,2.00000) + 1.0000'
 
 //Converts user input into shader script
 function functoshader(STR){
-//BLOCK 1:
+
+//BLOCK 1: Only works for integers. The inbuilt pow(x,y) in GLSL only works for y >= 0
     for (var i = 0; i < STR.length; i++) {//x^y --> pow(x,y)
         if(STR[i] == '^'){
             //This creates the pow(x,y) string
@@ -33,8 +51,9 @@ function functoshader(STR){
             //End up with x^y ---> pow(x,y)
             STR = STR.replace('^',replace);
         }
-      }
-
+      } 
+      //Quickline to remove all whitespace from a
+      STR = STR.replace(/\s+/g, '')
 
       //BLOCK 2:
       //Adam and Andrew I don't know how to explain this regex
@@ -42,8 +61,10 @@ function functoshader(STR){
       //https://stackoverflow.com/questions/17374893/how-to-extract-floating-numbers-from-strings-in-javascript
 
     var regex = /[+-]?\d+(\.\d+)?/g;
-    var ints = STR.match(regex).map(function(v) { return parseFloat(v); }); //Produces array of numbers from  input string
-    var stringints = STR.match(regex);  //Produces array of string of numbers from input string
+ //Produces array of numbers from  input string
+    var ints = STR.match(regex).map(function(v) { return parseFloat(v); }); 
+   //Produces array of string of numbers from input string
+    var stringints = STR.match(regex);  
     for(var i = 0; i < stringints.length; i++){
         //This line didn't do what I intended but it works so whatever
         if(Number.isInteger(stringints[i]) == false){
@@ -89,6 +110,8 @@ function functoshader(STR){
 // var GSTR = GSTR1.replace(/y/g, 'uv.g');
 // return [FSTR,GSTR]
 // }
+
+
 
 
 function ShowHide(id){
