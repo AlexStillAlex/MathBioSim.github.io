@@ -25,7 +25,7 @@
         <script type="text/javascript" src="../3rd/three.min.js"></script>
         
         <script type="text/javascript" src="../gradientui/gradientui.js"></script>
-        <script type = "text/javascript" src = "grayscott.js"></script>
+        <script type = "text/javascript" src = "grayscott.js" ></script>
         <script type = "text/javascript" src = "minimain.js" ></script>
 
         <!--script type="text/javascript" src="http://mrdoob.github.com/three.js/build/three.min.js"></script-->
@@ -81,6 +81,11 @@
             float step_x = 1.0/screenWidth;
             float step_y = 1.0/screenHeight;
             
+            //Takes floats labelled du and dv and HOPEFULLY returns laplacian + f(u,v)
+            vec2 KineticFunc(float du, float dv){
+
+                return vec2(1.0,0);
+            }
             
             void main()
             {
@@ -198,11 +203,13 @@
 
          <!-- ||This stuff is the ACTUAL html. Like the content/canvas...Not the above mess|| -->
         <meta charset="UTF-8">
+        <!-- Why the fuck did he put his CSS here. what an ass -->
         <style>
             #gradient
             {
-                height: 40px;
-                width: 85%;
+                height: 40px; 
+                width: 300px;  /* orignally 85% */
+               
                 margin-top: 5px;
                 margin-left:auto;
                 margin-right:auto;
@@ -211,13 +218,21 @@
         <script>
             $(function()
             {
+                
                 $("#gradient").gradient({values:
-                                        [[0, '#000000'],
+        
+                    //This calls the 'AddColorStop' at somepoint. If any of these values is outside of the specified range
+                    //Default being (0,1) the colourbar shits itself
+                    //Alex change this then delete these comments.
+
+                    //Future Alex here. Tried changing it. Realised AddColorStop can only take values between [0,1]. 
+                    //This means I'll have to 'normalise' these set of values somehow
+                                        [[0.0, '#000000'],
                                          [0.2, '#00FF00'],
                                          [0.21, '#FFFF00'],
                                          [0.4, '#FF0000'],
                                          [0.6, '#FFFFFF']]});
-                
+                                         //alert(gradient.values);
                 // KLUDGE!
                 colorPicker.offsetX = -512;
                 colorPicker.offsetY = -256;
@@ -228,11 +243,14 @@
             });
         </script>
     </head>
-    <div class="navbar">
+    <!-- Possible script for page navigation. a TODO! -->
+    <!-- <div class="navbar">
         <a class="active" href="#">Reaction diffusion system</a>
         <a href="#">A page</a>
         <a href="#">Another!!</a>
-      </div>
+      </div> -->
+
+
    <!-- <marquee> <h1>Reaction diffusion system (Gray-Scott model)</h1></marquee> -->
 
 
@@ -246,7 +264,7 @@
     <body onload = "katex.render('\\frac{\\partial u}{\\partial t} = D_1 \\Delta u + ' + document.getElementById('F').value,functionSolveF);
                     katex.render('\\frac{\\partial v}{\\partial t} = D_2 \\Delta v + ' + document.getElementById('G').value,functionSolveG)">
 
-        <div id = "simulation">
+        <div id = "simulation" >
         <canvas id="myCanvas" class="viewer" style="width:1024px;height:512 px"></canvas>
 
         <aside class="panel">
@@ -259,7 +277,7 @@
                 </ol>
             </section> -->
             <section id="controls">
-                <h4>Controls (Irrelevant)</h4>
+                <!-- <h4>Controls (Irrelevant)</h4> -->
                 <!-- ||Gonna copy this for future option styles.|| -->
                 <form name="ex">
                     Presets:
@@ -286,6 +304,7 @@
                 <p/>
 
 
+
                 <!-- ############################################### Commented out feed/death rates -->
                 Diffusion constant 1 \(D_1\):
                 <span class="remark" id="replenishment"></span><br/>
@@ -297,35 +316,43 @@
                 <div id="sld_diminishment" class="slider"></div>
 
 
+
                 <!-- ######################################################################## -->
 
                 <!-- ||Places the text box and calls the getVal function|| -->
 
                 <!-- //////////////////////////////////////////// -->
 
-                    <form id = 'BasicSettings'>
+                    <form   id = 'BasicSettings'>
                         <p>
-                            <label for="name">\(f(u,v)  \)</label> 
+                            <div class="tooltip" for="name">\(f(u,v) \)
+                            <span class="tooltiptext">Tooltip text</span>
+                            </div>
+                            <br>
                             <input id = 'F' type="text" value="-u*v^2 + a*(b - u)" onblur="getVal()" src = "grayscott.js">
-
                         </p>
-
                         <p>
-
-                            <label for="name">\(g(u,v) \)</label> 
+                            <div class="tooltip" for="name">\(g(u,v) \)
+                                <span class = "tooltiptext">okay</span>
+                            </div> 
+                            <br>
                             <input id = 'G' type="text" value="u*v^2 - c*v" onblur="getVal()" src = "grayscott.js">
                             <!-- The Button that changes everything -->
                             <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
                         </p>        
-                        <p>
                         </form>
+
+
                             <!-- On click the advanced settings shows/hides the things like timestep, kinetic parameters etc -->
-                            <h4 class="unsafe" onClick = "ShowHide(document.getElementById('Advanced'))"  src = "minimain.js">Advanced settings(make it obvious this is clickable)</h4>
+                            <h4 class="unsafe" onClick = "ShowHide(document.getElementById('Advanced'))"  src = "minimain.js">Advanced settings (Click me for the mathematically inclined!)</h4>
                         
 
                         <form id = Advanced>
                             <!-- Variable time step. -->
-                        <label for="name">\(\Delta t \)<label> 
+                        <div class = "tooltip" for="name">\(\Delta t \)
+                            <span class = "tooltiptext"> on is blowing up!</span>
+                            <div> 
+
                             <!-- Allows for incrementing and minimum value is 0 -->
                             <input id = 'dt' type="number" min = 0 step = 0.1 value="0.8" onblur="getVal()" src = "grayscott.js"> </p>
 
@@ -344,15 +371,19 @@
                             <label for="name">Kinetic \(c\)</label> 
                             <input id = 'KineticC' type="number" step = 0.1 value="0.097" onblur="getVal()" src = "grayscott.js">
                                                 </p>
-                      </form>
+                                            </form>
 
-
-                
+                                            <!-- This is poor practise -->
+                                            <!-- On page load hides the advanced settings. -->
+                                            <!-- Alex change this. -->
+                                            <script>
+                                            location.onload = ShowHide(document.getElementById('Advanced'));
+                                            </script>
          
                 
 
                 Colors:
-                <div id="gradient" ></div>
+                <div id="gradient"></div>
                 <div style="font-size:x-small">Share (paste and press enter):</div>
                 <div style="text-align:center"><input id="share" style="width:85%"/></div>
 

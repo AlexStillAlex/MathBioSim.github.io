@@ -144,6 +144,7 @@ init = function()
         KC: {type: "f", value: undefined},
 
         brush: {type: "v2", value: new THREE.Vector2(-10, -10)},
+        // take a look at this
         color1: {type: "v4", value: new THREE.Vector4(0, 0, 0.0, 0)},
         color2: {type: "v4", value: new THREE.Vector4(0, 1, 0, 0.2)},
         color3: {type: "v4", value: new THREE.Vector4(1, 1, 0, 0.21)},
@@ -298,9 +299,9 @@ try {
     //Tells the user theres an error
     //Reloads the page.
     catch{
-        alert('Howdy partner! Seems like you have typed in a banned expression. Try again');
+        alert('Howdy partner! Seems like you have typed in something the GPU did not like. Try again');
         location.reload();
-        clean();
+
         return false;
     }
     
@@ -310,7 +311,6 @@ try {
     mScreenQuad.material = mScreenMaterial;
     //Rendering requires scene and camera/projection
     mRenderer.render(mScene, mCamera);
-
     requestAnimationFrame(render);
 }
 
@@ -328,9 +328,11 @@ loadPreset = function(idx)
 var updateUniformsColors = function()
 {
     var values = $("#gradient").gradient("getValuesRGBS");
+    
     for(var i=0; i<values.length; i++)
     {
         var v = values[i];
+
         mColors[i].value = new THREE.Vector4(v[0], v[1], v[2], v[3]);
     }
 
@@ -554,7 +556,7 @@ parseShareString = function()
  
         newValues.push(v);
     }
-
+//Find GRADIENT alex
     $("#gradient").gradient("setValues", newValues);
     feed = newFeed;
     kill = newKill;

@@ -101,6 +101,7 @@ a:active {color:#ffffff;}
     
 }
 
+
 /* CHANGING THE BUTTONS */
 input[type=button]
 ,input[type=text], input[type=number] 
@@ -151,4 +152,34 @@ input[type=button]
       width: 100%;
       text-align: left; /* If you want the text to be left-aligned on small screens */
     }
+  }
+
+  /*  ###########################################################'## */
+  /* Tooltip containers */
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    /* Makes text appear to the right of the tooltip */
+
+   
+    /* Position the tooltip text - see examples below! */
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
   }

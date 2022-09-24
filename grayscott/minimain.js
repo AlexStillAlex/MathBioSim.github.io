@@ -51,8 +51,9 @@ function functoshader(STR){
             //End up with x^y ---> pow(x,y)
             STR = STR.replace('^',replace);
         }
-      }
-
+      } 
+      //Quickline to remove all whitespace from a
+      STR = STR.replace(/\s+/g, '')
 
       //BLOCK 2:
       //Adam and Andrew I don't know how to explain this regex
@@ -109,6 +110,8 @@ function functoshader(STR){
 // var GSTR = GSTR1.replace(/y/g, 'uv.g');
 // return [FSTR,GSTR]
 // }
+
+
 
 
 function ShowHide(id){
