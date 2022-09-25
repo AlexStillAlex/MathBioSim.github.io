@@ -203,7 +203,7 @@
 
          <!-- ||This stuff is the ACTUAL html. Like the content/canvas...Not the above mess|| -->
         <meta charset="UTF-8">
-        <!-- Why the fuck did he put his CSS here. what an ass -->
+
         <style>
             #gradient
             {
@@ -280,7 +280,7 @@
                 <!-- <h4>Controls (Irrelevant)</h4> -->
                 <!-- ||Gonna copy this for future option styles.|| -->
                 <form name="ex">
-                    Presets:
+                    Presets: 
                     <select name="scene" style="width:100%"
                         onchange="loadPreset(document.ex.scene.selectedIndex)">
                         <option value="0" selected="selected">Default</option>
@@ -336,7 +336,7 @@
                                 <span class = "tooltiptext">okay</span>
                             </div> 
                             <br>
-                            <input id = 'G' type="text" value="u*v^2 - c*v" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'G' type="text" value="u*v^2 - (a+c)*v" onblur="getVal()" src = "grayscott.js">
                             <!-- The Button that changes everything -->
                             <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
                         </p>        
@@ -344,7 +344,7 @@
 
 
                             <!-- On click the advanced settings shows/hides the things like timestep, kinetic parameters etc -->
-                            <h4 class="unsafe" onClick = "ShowHide(document.getElementById('Advanced'))"  src = "minimain.js">Advanced settings (Click me for the mathematically inclined!)</h4>
+                            <h4 class="unsafe" onClick = "ShowHide(document.getElementById('Advanced'))"  src = "minimain.js">Advanced settings (Click me!)</h4>
                         
 
                         <form id = Advanced>
@@ -354,7 +354,7 @@
                             <div> 
 
                             <!-- Allows for incrementing and minimum value is 0 -->
-                            <input id = 'dt' type="number" min = 0 step = 0.1 value="0.8" onblur="getVal()" src = "grayscott.js"> </p>
+                            <input id = 'dt' type="number" min = 0 step = 0.1 value="0.80" onblur="getVal()" src = "grayscott.js"> </p>
 
 
             
@@ -369,7 +369,7 @@
                                             </p>
                                             <p>
                             <label for="name">Kinetic \(c\)</label> 
-                            <input id = 'KineticC' type="number" step = 0.1 value="0.097" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'KineticC' type="number" step = 0.1 value="0.06" onblur="getVal()" src = "grayscott.js">
                                                 </p>
                                             </form>
 

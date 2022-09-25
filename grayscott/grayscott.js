@@ -45,55 +45,117 @@ var presets = [
     { // Default
         //feed: 0.018,
         //kill: 0.051
-        feed: 0.27,
-        kill: 0.1,
-        KA: 1.0,
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.018,
         KB: 1.0,
-        KC: 1.0,
+        KC: 0.051,
     },
     { // Solitons
-        feed: 0.03,
-        kill: 0.062
+        // feed: 0.03,
+        // kill: 0.062
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.03,
+        KC: 0.062,
+        KB: 1.0
     },
     { // Pulsating solitons
-        feed: 0.025,
-        kill: 0.06
+        // feed: 0.025,
+        // kill: 0.06,
+        feed: 0.2097,
+        kill: 0.105,
+
+        KA: 0.025,
+        KC: 0.06,
+        KB: 1.0
     },
     { // Worms.
-        feed: 0.078,
-        kill: 0.061
+        // feed: 0.078,
+        // kill: 0.061
+        feed: 0.2097,
+        kill: 0.105,
+
+        KA: 0.078,
+        KC: 0.061,
+        KB: 1.0
+
     },
     { // Mazes
-        feed: 0.029,
-        kill: 0.057
+        // feed: 0.029,
+        // kill: 0.057
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.029,
+        KB: 1.0,
+        KC: 0.057
     },
     { // Holes
-        feed: 0.039,
-        kill: 0.058
+        // feed: 0.039,
+        // kill: 0.058
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.039,
+        KB : 1.0,
+        KC: 0.058
     },
     { // Chaos
-        feed: 0.026,
-        kill: 0.051
+        // feed: 0.026,
+        // kill: 0.051
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.026,
+        KB: 1.0,
+        KC: 0.051
     },
     { // Chaos and holes (by clem)
-        feed: 0.034,
-        kill: 0.056
+        // feed: 0.034,
+        // kill: 0.056
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.034,
+        KB: 1.0,
+        KC: 0.056
     },
     { // Moving spots.
-        feed: 0.014,
-        kill: 0.054
+        // feed: 0.014,
+        // kill: 0.054
+        feed: 0.2097,
+        kill: 0.105,
+
+        KA: 0.014,
+        KB: 1.0,
+        KC: 0.056
+        
     },
     { // Spots and loops.
-        feed: 0.018,
-        kill: 0.051
+        // feed: 0.018,
+        // kill: 0.051
+        feed: 0.2097,
+        kill: 0.105,
+        KA: 0.018,
+        KB: 1.0,
+        KC: 0.051
     },
     { // Waves
-        feed: 0.014,
-        kill: 0.045
+        // feed: 0.014,
+        // kill: 0.045
+        feed: 0.2097,
+        kill: 0.105,
+
+        KA: 0.014,
+        KC: 0.045,
+        KB: 1.0
     },
     { // The U-Skate World
-        feed: 0.062,
-        kill: 0.06093
+        // feed: 0.062,
+        // kill: 0.06093,
+        feed: 0.2097,
+        kill: 0.105,
+
+        KA: 0.062,
+        KB: 1.0,
+        KC: 0.06093
     }
 ];
 
@@ -103,6 +165,10 @@ var presets = [
 // Configuration.
 var feed = presets[0].feed;
 var kill = presets[0].kill;
+
+var KA = presets[0].KA;
+var KB = presets[0].KB;
+var KC = presets[0].KC;
 
 
 init = function() 
@@ -139,9 +205,9 @@ init = function()
 
 
         //These initialise the kinetic constants
-        KA: {type: "f", value: undefined},
-        KB: {type: "f", value: undefined},
-        KC: {type: "f", value: undefined},
+        KA: {type: "f", value: KA},
+        KB: {type: "f", value: KB},
+        KC: {type: "f", value: KC},
 
         brush: {type: "v2", value: new THREE.Vector2(-10, -10)},
         // take a look at this
@@ -321,6 +387,9 @@ loadPreset = function(idx)
 {
     feed = presets[idx].feed;
     kill = presets[idx].kill;
+    KA = presets[idx].KA;
+    KB = presets[idx].KB;
+    KC = presets[idx].KC;
     worldToForm();
 }
 
@@ -452,11 +521,18 @@ $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', 
         resize(window.oldCanvSize.width, window.oldCanvSize.height);
 });
 
+//Updates the values of the sliders and stuff
 var worldToForm = function()
 {
     //document.ex.sldReplenishment.value = feed * 1000;
     $("#sld_replenishment").slider("value", feed);
     $("#sld_diminishment").slider("value", kill);
+
+    document.getElementById('KineticA').value = KA;
+    document.getElementById('KineticB').value = KB;
+    document.getElementById('KineticC').value = KC;
+    Change();
+  
 }
 
 
