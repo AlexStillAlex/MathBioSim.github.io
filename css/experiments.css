@@ -1,38 +1,37 @@
-
 body {
-    font-family:sans-serif;
-    background:#333333;
-    color:#777777;
+  font-family:sans-serif;
+  background:#333333;
+  color:#777777;
 
-    /* ################################## */
-    width: 1400px; /* originally 1000px */
-    /* ##################### */
+  /* ################################## */
+  width: 1400px; /* originally 1000px */
+  /* ##################### */
 
-    margin: 0 auto;
+  margin: 0 auto;
 }
 /* The CSS for the table. */
 form
 {
-  display: inline-block;
-  background-color: black;
-  padding: 6px;
+display: inline-block;
+background-color: black;
+padding: 6px;
 }
 
 label{
-  display: block;
-  direction: ltr; 
+display: block;
+direction: ltr; 
 }
 
 input{
-  direction: ltr; 
+direction: ltr; 
 }
 
 label::after{
-  content: attr(data-text);
+content: attr(data-text);
 }
 
 header, footer, aside, nav {
-    display: block;
+  display: block;
 }
 
 a:link {color:#777777;}
@@ -41,64 +40,64 @@ a:hover {color:#999999;}
 a:active {color:#ffffff;}
 
 #copyright {
-    font-size:8pt;
-    text-align:center;
-    margin-top:10px;
+  font-size:8pt;
+  text-align:center;
+  margin-top:10px;
 }
 
 .remark {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 .unsafe {
-    color : #c86464;
+  color : #c86464;
 }
 
 #simulation {
-    display:table;
-    margin: 0 auto;
-    border:1px solid;
-    box-shadow: 10px 10px 7px #222;
+  display:table;
+  margin: 0 auto;
+  border:1px solid;
+  box-shadow: 10px 10px 7px #222;
 }
 
-    #simulation .viewer {
-        display:table-cell;
+  #simulation .viewer {
+      display:table-cell;
+  }
+  /* This should control the main panel... */
+  #simulation .panel {
+     display:table-cell;
+      vertical-align: middle;
+      position: relative;
+      width: 800px; /* originallly 200px */
+      height: 200px; 
+      border-left: #555;
+      padding: 0px 5px 0px 5px;
+      font-size: 11pt;
+      background:#000000;
+  }
+      #simulation .panel header {
+          color: #ffffff;
+      }
+      
+    #simulation .panel .slider {
+      margin: 7px 10px 10px 10px;
     }
-    /* This should control the main panel... */
-    #simulation .panel {
-       display:table-cell;
-        vertical-align: middle;
-        position: relative;
-        width: 800px; /* originallly 200px */
-        height: 200px; 
-        border-left: #555;
-        padding: 0px 5px 0px 5px;
-        font-size: 11pt;
-        background:#000000;
-    }
-        #simulation .panel header {
-            color: #ffffff;
-        }
-        
-    	#simulation .panel .slider {
-    		margin: 7px 10px 10px 10px;
-    	}
-        #simulation .panel section {
-            margin-bottom: 15px;
-            border-bottom: 1px dotted;
-        }
-        #simulation .panel section:last-child {
-            margin-bottom: 0px;
-            border-bottom: 0px;
-        }
+      #simulation .panel section {
+          margin-bottom: 15px;
+          border-bottom: 1px dotted;
+      }
+      #simulation .panel section:last-child {
+          margin-bottom: 0px;
+          border-bottom: 0px;
+      }
 
 /* The right hand side */
 #myCanvas {
-    display:block;
-    
-    background-color:#000000;
-    border-right:1px solid;
-    
+  display:block;
+  
+  background-color:#000000;
+  border-right:1px solid;
+  
 }
 
 
@@ -106,80 +105,80 @@ a:active {color:#ffffff;}
 input[type=button]
 ,input[type=text], input[type=number] 
 {
-    background-color: #555;
-    border: none;
-    color: white;
-    padding: 4px 16px;
-    text-decoration: none;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
+  background-color: #555;
+  border: none;
+  color: white;
+  padding: 4px 16px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
 
 /* TOP OF THE PAGE NAVIGATION BAR */
 /* Style the navigation menu */
 .navbar {
-    width: 100%;
-    background-color: #555;
-    overflow: auto;
-  }
-  
-  /* Navigation links */
+  width: 100%;
+  background-color: #555;
+  overflow: auto;
+}
+
+/* Navigation links */
+.navbar a {
+  float: left;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  width: 30%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+  text-align: center; /* If you want the text to be centered */
+}
+
+/* Add a background color on mouse-over */
+.navbar a:hover {
+  background-color: #000;
+}
+
+/* Style the current/active link */
+.navbar a.active {
+  background-color: #777;
+}
+
+/* Add responsiveness - on screens less than 500px, make the navigation links appear on top of each other, instead of next to each other */
+@media screen and (max-width: 500px) {
   .navbar a {
-    float: left;
-    padding: 12px;
-    color: white;
-    text-decoration: none;
-    font-size: 17px;
-    width: 30%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
-    text-align: center; /* If you want the text to be centered */
+    float: none;
+    display: block;
+    width: 100%;
+    text-align: left; /* If you want the text to be left-aligned on small screens */
   }
-  
-  /* Add a background color on mouse-over */
-  .navbar a:hover {
-    background-color: #000;
-  }
-  
-  /* Style the current/active link */
-  .navbar a.active {
-    background-color: #777;
-  }
-  
-  /* Add responsiveness - on screens less than 500px, make the navigation links appear on top of each other, instead of next to each other */
-  @media screen and (max-width: 500px) {
-    .navbar a {
-      float: none;
-      display: block;
-      width: 100%;
-      text-align: left; /* If you want the text to be left-aligned on small screens */
-    }
-  }
+}
 
-  /*  ###########################################################'## */
-  /* Tooltip containers */
-  .tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-  }
-  
-  /* Tooltip text */
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    /* Makes text appear to the right of the tooltip */
+/*  ###########################################################'## */
+/* Tooltip containers */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
 
-   
-    /* Position the tooltip text - see examples below! */
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* Show the tooltip text when you mouse over the tooltip container */
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-  }
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  /* Makes text appear to the right of the tooltip */
+
+ 
+  /* Position the tooltip text - see examples below! */
+  position: relative;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
