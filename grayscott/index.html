@@ -166,7 +166,7 @@
             void main()
             {
                 //This selects v(x,y) to be plotted. Changing to [Junk].r plots u but has an unintended effect.
-                float value = texture2D(tSource, vUv).g;
+                float value = texture2D(tSource, vUv).r;
                 int step = int(floor(value));
                 //float a = fract(value);
                 float a;
