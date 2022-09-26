@@ -366,7 +366,8 @@ try {
     //Reloads the page.
     catch{
         alert('Howdy partner! Seems like you have typed in something the GPU did not like. Try again');
-        location.reload();
+        //alert(functoshader(document.getElementById('F')),functoshader(document.getElementById('G')))
+        //location.reload();
 
         return false;
     }

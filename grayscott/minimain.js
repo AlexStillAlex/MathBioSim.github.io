@@ -159,7 +159,7 @@ function Change() {
 
     //Changes the pretty math function stuff
     var Fval = '\\frac{\\partial u}{\\partial t} = D_1 \\Delta u +' + document.getElementById('F').value;
-    var Gval = '\\frac{\\partial u}{\\partial t} = D_1 \\Delta u +' + document.getElementById('G').value;
+    var Gval = '\\frac{\\partial v}{\\partial t} = D_1 \\Delta u +' + document.getElementById('G').value;
 
     //This is in the katex documentation somewhere
     katex.render(Fval,functionSolveF)
