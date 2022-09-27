@@ -45,8 +45,8 @@ var presets = [
     { // Default
         //feed: 0.018,
         //kill: 0.051
-        feed: 0.2097,
-        kill: 0.105,
+        kill: 0.2097,
+        feed: 0.105,
         KA: 0.018,
         KB: 1.0,
         KC: 0.051,

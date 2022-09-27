@@ -166,8 +166,8 @@
             void main()
             {
                 //This selects v(x,y) to be plotted. Changing to [Junk].r plots u but has an unintended effect.
-                float value = texture2D(tSource, vUv).r;
-                int step = int(floor(value));
+                float value = texture2D(tSource, vUv).g;
+                //int step = int(floor(value));
                 //float a = fract(value);
                 float a;
                 vec3 col;
@@ -329,14 +329,14 @@
                             <span class="tooltiptext">Tooltip text</span>
                             </div>
                             <br>
-                            <input id = 'F' type="text" value="-u*v^2 + a*(b - u)" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'F' type="text" value="v*u^2 - (a+c)*u" onblur="getVal()" src = "grayscott.js">
                         </p>
                         <p>
                             <div class="tooltip" for="name">\(g(u,v) \)
                                 <span class = "tooltiptext">okay</span>
                             </div> 
                             <br>
-                            <input id = 'G' type="text" value="u*v^2 - (a+c)*v" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'G' type="text" value="-v*u^2 + a*(b-v)" onblur="getVal()" src = "grayscott.js">
                             <!-- The Button that changes everything -->
                             <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
                         </p>        
