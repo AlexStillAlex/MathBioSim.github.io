@@ -43,38 +43,38 @@ var mMinusOnes = new THREE.Vector2(-1, -1);
 // Some presets.
 var presets = [
     { // Default
-        //feed: 0.018,
-        //kill: 0.051
-        kill: 0.2097,
-        feed: 0.105,
+        //Diff1: 0.018,
+        //Diff2: 0.051
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.018,
         KB: 1.0,
         KC: 0.051,
     },
     { // Solitons
-        // feed: 0.03,
-        // kill: 0.062
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.03,
+        // Diff2: 0.062
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.03,
         KC: 0.062,
         KB: 1.0
     },
     { // Pulsating solitons
-        // feed: 0.025,
-        // kill: 0.06,
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.025,
+        // Diff2: 0.06,
+        Diff1: 0.2097,
+        Diff2: 0.105,
 
         KA: 0.025,
         KC: 0.06,
         KB: 1.0
     },
     { // Worms.
-        // feed: 0.078,
-        // kill: 0.061
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.078,
+        // Diff2: 0.061
+        Diff1: 0.2097,
+        Diff2: 0.105,
 
         KA: 0.078,
         KC: 0.061,
@@ -82,46 +82,46 @@ var presets = [
 
     },
     { // Mazes
-        // feed: 0.029,
-        // kill: 0.057
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.029,
+        // Diff2: 0.057
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.029,
         KB: 1.0,
         KC: 0.057
     },
     { // Holes
-        // feed: 0.039,
-        // kill: 0.058
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.039,
+        // Diff2: 0.058
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.039,
         KB : 1.0,
         KC: 0.058
     },
     { // Chaos
-        // feed: 0.026,
-        // kill: 0.051
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.026,
+        // Diff2: 0.051
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.026,
         KB: 1.0,
         KC: 0.051
     },
     { // Chaos and holes (by clem)
-        // feed: 0.034,
-        // kill: 0.056
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.034,
+        // Diff2: 0.056
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.034,
         KB: 1.0,
         KC: 0.056
     },
     { // Moving spots.
-        // feed: 0.014,
-        // kill: 0.054
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.014,
+        // Diff2: 0.054
+        Diff1: 0.2097,
+        Diff2: 0.105,
 
         KA: 0.014,
         KB: 1.0,
@@ -129,29 +129,29 @@ var presets = [
         
     },
     { // Spots and loops.
-        // feed: 0.018,
-        // kill: 0.051
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.018,
+        // Diff2: 0.051
+        Diff1: 0.2097,
+        Diff2: 0.105,
         KA: 0.018,
         KB: 1.0,
         KC: 0.051
     },
     { // Waves
-        // feed: 0.014,
-        // kill: 0.045
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.014,
+        // Diff2: 0.045
+        Diff1: 0.2097,
+        Diff2: 0.105,
 
         KA: 0.014,
         KC: 0.045,
         KB: 1.0
     },
     { // The U-Skate World
-        // feed: 0.062,
-        // kill: 0.06093,
-        feed: 0.2097,
-        kill: 0.105,
+        // Diff1: 0.062,
+        // Diff2: 0.06093,
+        Diff1: 0.2097,
+        Diff2: 0.105,
 
         KA: 0.062,
         KB: 1.0,
@@ -163,8 +163,8 @@ var presets = [
 
 
 // Configuration.
-var feed = presets[0].feed;
-var kill = presets[0].kill;
+var Diff1 = presets[0].Diff1;
+var Diff2 = presets[0].Diff2;
 
 var KA = presets[0].KA;
 var KB = presets[0].KB;
@@ -200,8 +200,8 @@ init = function()
         screenHeight: {type: "f", value: undefined},
         tSource: {type: "t", value: undefined},
         delta: {type: "f", value: undefined},
-        feed: {type: "f", value: feed},
-        kill: {type: "f", value: kill},
+        Diff1: {type: "f", value: Diff1},
+        Diff2: {type: "f", value: Diff2},
 
 
         //These initialise the kinetic constants
@@ -327,8 +327,8 @@ var render = function(time)
     mScreenQuad.material = mGSMaterial;
     //Important lines useful in changing the timestep/parameters in real time
     mUniforms.delta.value = dt;
-    mUniforms.feed.value = feed;
-    mUniforms.kill.value = kill;
+    mUniforms.Diff1.value = Diff1;
+    mUniforms.Diff2.value = Diff2;
     //This updates the kinetic constants according to the User input
     mUniforms.KA.value = document.getElementById('KineticA').value;
     mUniforms.KB.value = document.getElementById('KineticB').value;
@@ -386,8 +386,8 @@ try {
 //This block is responsible for most of the UI (namely the panel)
 loadPreset = function(idx)
 {
-    feed = presets[idx].feed;
-    kill = presets[idx].kill;
+    Diff1 = presets[idx].Diff1;
+    Diff2 = presets[idx].Diff2;
     KA = presets[idx].KA;
     KB = presets[idx].KB;
     KC = presets[idx].KC;
@@ -525,9 +525,9 @@ $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', 
 //Updates the values of the sliders and stuff
 var worldToForm = function()
 {
-    //document.ex.sldReplenishment.value = feed * 1000;
-    $("#sld_replenishment").slider("value", feed);
-    $("#sld_diminishment").slider("value", kill);
+    //document.ex.sldReplenishment.value = Diff1 * 1000;
+    $("#sld_replenishment").slider("value", Diff1);
+    $("#sld_diminishment").slider("value", Diff2);
 
     document.getElementById('KineticA').value = KA;
     document.getElementById('KineticB').value = KB;
@@ -542,17 +542,17 @@ var init_controls = function()
 {//#######################################Very very very lazy implementation of adjusting diffusivity constants.
 
     $("#sld_replenishment").slider({
-        value: feed, min: 0, max:10, step:0.01,
-        change: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();},
-        slide: function(event, ui) {$("#replenishment").html(ui.value); feed = ui.value; updateShareString();}
+        value: Diff1, min: 0, max:10, step:0.01,
+        change: function(event, ui) {$("#replenishment").html(ui.value); Diff1 = ui.value; updateShareString();},
+        slide: function(event, ui) {$("#replenishment").html(ui.value); Diff1 = ui.value; updateShareString();}
     });
-    $("#sld_replenishment").slider("value", feed);
+    $("#sld_replenishment").slider("value", Diff1);
     $("#sld_diminishment").slider({
-        value: kill, min: 0, max:10, step:0.01,
-        change: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();},
-        slide: function(event, ui) {$("#diminishment").html(ui.value); kill = ui.value; updateShareString();}
+        value: Diff2, min: 0, max:10, step:0.01,
+        change: function(event, ui) {$("#diminishment").html(ui.value); Diff2 = ui.value; updateShareString();},
+        slide: function(event, ui) {$("#diminishment").html(ui.value); Diff2 = ui.value; updateShareString();}
     });
-    $("#sld_diminishment").slider("value", kill);
+    $("#sld_diminishment").slider("value", Diff2);
 
     //###############################################
     //Looks like some Jquery nonsense I don't know.
@@ -604,10 +604,10 @@ parseShareString = function()
         return;
     }
 
-    var newFeed = parseFloat(fields[0]);
-    var newKill = parseFloat(fields[1]);
+    var newDiff1 = parseFloat(fields[0]);
+    var newDiff2 = parseFloat(fields[1]);
 
-    if(isNaN(newFeed) || isNaN(newKill))
+    if(isNaN(newDiff1) || isNaN(newDiff2))
     {
         alertInvalidShareString();
         return;
@@ -635,14 +635,14 @@ parseShareString = function()
     }
 //Find GRADIENT alex
     $("#gradient").gradient("setValues", newValues);
-    feed = newFeed;
-    kill = newKill;
+    Diff1 = newDiff1;
+    Diff2 = newDiff2;
     worldToForm();
 }
 
 updateShareString = function()
 {
-    var str = "".concat(feed, ",", kill);
+    var str = "".concat(Diff1, ",", Diff2);
 
     var values = $("#gradient").gradient("getValues");
     for(var i=0; i<values.length; i++)
