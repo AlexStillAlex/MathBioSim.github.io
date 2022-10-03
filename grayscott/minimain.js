@@ -181,8 +181,8 @@ function stringscript(){
     uniform float screenHeight;
     uniform sampler2D tSource;
     uniform float delta;  // ||This is equivalent to dt in the forward euler.||
-    uniform float feed;
-    uniform float kill;
+    uniform float DiffU;
+    uniform float DiffV;
     uniform vec2 brush;
 
     // Kinetic parameters DONE
@@ -205,8 +205,8 @@ function stringscript(){
             return;
         }
         
-        //float feed = vUv.y * 0.083;
-        //float kill = vUv.x * 0.073;
+        //float DiffU = vUv.y * 0.083;
+        //float DiffV = vUv.x * 0.073;
         
 
 
@@ -221,8 +221,8 @@ function stringscript(){
         vec2 lapl = (uv0 + uv1 + uv2 +  uv3 - 4.0*uv);//10485.76;
 
                             //  ||Diffusion coefficients|| (And Forward Euler)||                  
-        float du = /*0.00002*/feed*lapl.r + ${fFunc}; 
-        float dv = /*0.00001*/kill*lapl.g  + ${gFunc};
+        float du = /*0.00002*/DiffU*lapl.r + ${fFunc}; 
+        float dv = /*0.00001*/DiffV*lapl.g  + ${gFunc};
         vec2 dst = uv + delta*vec2(du, dv);
         
         if(brush.x > 0.0) 

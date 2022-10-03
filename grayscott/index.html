@@ -59,9 +59,9 @@
             uniform float delta;  // ||This is  equivalent to dt in the forward euler.||
 
             // What WILL be the diffusion ratios
-            //Still need to be renamed from Diff1 and Diff2
-            uniform float Diff1;
-            uniform float Diff2;
+            //Still need to be renamed from DiffU and DiffV
+            uniform float DiffU;
+            uniform float DiffV;
 
             // Kinetic parameters DONE
             uniform float KA;
@@ -95,8 +95,8 @@
                     return;
                 }
                 
-                //float Diff1 = vUv.y * 0.083;
-                //float Diff2 = vUv.x * 0.073;
+                //float DiffU = vUv.y * 0.083;
+                //float DiffV = vUv.x * 0.073;
                 
 
 
@@ -114,8 +114,8 @@
 
                 //This is f(u_n, v_n)
                 //Write a function somehow
-                float du = Diff1*lapl.r - uv.r*pow(uv.g,2.0) + 0.037*(1.0 - uv.r);
-                float dv = Diff2*lapl.g + uv.r*pow(uv.g,2.0) - (0.097)*uv.g;
+                float du = DiffU*lapl.r - uv.r*pow(uv.g,2.0) + 0.037*(1.0 - uv.r);
+                float dv = DiffV*lapl.g + uv.r*pow(uv.g,2.0) - (0.097)*uv.g;
 
 
 
@@ -153,8 +153,8 @@
             uniform float screenHeight;
             uniform sampler2D tSource;
             uniform float delta;
-            uniform float Diff1;
-            uniform float Diff2;
+            uniform float DiffU;
+            uniform float DiffV;
             uniform vec4 color1;
             uniform vec4 color2;
             uniform vec4 color3;
@@ -284,12 +284,12 @@
                     <select name="scene" style="width:100%"
                         onchange="loadPreset(document.ex.scene.selectedIndex)">
                         <option value="0" selected="selected">Default</option>
-                        <option value="1">Schnakenberg (Spots)</option>
-                        <option value="2">Schakenberg (Labyrinthine)</option>
-                        <option value="3">Gierer - Meinhardt</option>
-                        <option value="4">Thomas (Spots)</option>
-                        <option value="5">Thomas (Labyrinthine)</option>
-                        <option value="6">FitzHugh-Nagumo</option>
+                        <option value="1">Solitons</option>
+                        <option value="2">Pulsating Solitions</option>
+                        <option value="3">Worms</option>
+                        <option value="4">Mazes</option>
+                        <option value="5">Holes</option>
+                        <option value="6">Chaos</option>
                         <option value="7">Chaos and holes</option>
                         <option value="8">Moving spots</option>
                         <option value="9">Spots and loops</option>
@@ -305,7 +305,7 @@
 
 
 
-                <!-- ############################################### Commented out Diff1/death rates -->
+                <!-- ############################################### Commented out DiffU/death rates -->
                 Diffusion constant 1 \(D_1\):
                 <span class="remark" id="replenishment"></span><br/>
                 <div id="sld_replenishment" class="slider"></div>
@@ -326,17 +326,17 @@
                     <form   id = 'BasicSettings'>
                         <p>
                             <div class="tooltip" for="name">\(f(u,v) \)
-                            <span class="tooltiptext">Tooltip text</span>
+                            <span class="tooltiptext">Kinetics governing the \(u(x,y,t)\) equation</span>
                             </div>
                             <br>
-                            <input id = 'F' type="text" value="v*u^2 - (a+c)*u" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'F' type="text" value="-u*v^2 + a*(b-u)" onblur="getVal()" src = "grayscott.js">
                         </p>
                         <p>
                             <div class="tooltip" for="name">\(g(u,v) \)
-                                <span class = "tooltiptext">okay</span>
+                                <span class = "tooltiptext">Kinetics governing the \(v(x,y,t)\) equation</span>
                             </div> 
                             <br>
-                            <input id = 'G' type="text" value="-v*u^2 + a*(b-v)" onblur="getVal()" src = "grayscott.js">
+                            <input id = 'G' type="text" value="u*v^2 - (a+c)*v" onblur="getVal()" src = "grayscott.js">
                             <!-- The Button that changes everything -->
                             <input id = 'alterself' type = 'button' value = "GO! " onclick = "Change()" >
                         </p>        
@@ -350,7 +350,7 @@
                         <form id = Advanced>
                             <!-- Variable time step. -->
                         <div class = "tooltip" for="name">\(\Delta t \)
-                            <span class = "tooltiptext"> on is blowing up!</span>
+                            <span class = "tooltiptext"> If your solution is blowing up, reduce me!</span>
                             <div> 
 
                             <!-- Allows for incrementing and minimum value is 0 -->
