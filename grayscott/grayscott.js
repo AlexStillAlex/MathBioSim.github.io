@@ -39,42 +39,45 @@ var mToggled = false;
 
 var mMinusOnes = new THREE.Vector2(-1, -1);
 
+var DiffU;
+var DiffV;
+
 
 // Some presets.
 var presets = [
     { // Default
-        //Diff1: 0.018,
-        //Diff2: 0.051
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        //DiffU: 0.018,
+        //DiffV: 0.051
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.018,
         KB: 1.0,
         KC: 0.051,
     },
     { // Solitons
-        // Diff1: 0.03,
-        // Diff2: 0.062
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.03,
+        // DiffV: 0.062
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.03,
         KC: 0.062,
         KB: 1.0
     },
     { // Pulsating solitons
-        // Diff1: 0.025,
-        // Diff2: 0.06,
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.025,
+        // DiffV: 0.06,
+        DiffU: 0.2097,
+        DiffV: 0.105,
 
         KA: 0.025,
         KC: 0.06,
         KB: 1.0
     },
     { // Worms.
-        // Diff1: 0.078,
-        // Diff2: 0.061
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.078,
+        // DiffV: 0.061
+        DiffU: 0.2097,
+        DiffV: 0.105,
 
         KA: 0.078,
         KC: 0.061,
@@ -82,46 +85,46 @@ var presets = [
 
     },
     { // Mazes
-        // Diff1: 0.029,
-        // Diff2: 0.057
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.029,
+        // DiffV: 0.057
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.029,
         KB: 1.0,
         KC: 0.057
     },
     { // Holes
-        // Diff1: 0.039,
-        // Diff2: 0.058
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.039,
+        // DiffV: 0.058
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.039,
         KB : 1.0,
         KC: 0.058
     },
     { // Chaos
-        // Diff1: 0.026,
-        // Diff2: 0.051
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.026,
+        // DiffV: 0.051
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.026,
         KB: 1.0,
         KC: 0.051
     },
     { // Chaos and holes (by clem)
-        // Diff1: 0.034,
-        // Diff2: 0.056
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.034,
+        // DiffV: 0.056
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.034,
         KB: 1.0,
         KC: 0.056
     },
     { // Moving spots.
-        // Diff1: 0.014,
-        // Diff2: 0.054
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.014,
+        // DiffV: 0.054
+        DiffU: 0.2097,
+        DiffV: 0.105,
 
         KA: 0.014,
         KB: 1.0,
@@ -129,29 +132,29 @@ var presets = [
         
     },
     { // Spots and loops.
-        // Diff1: 0.018,
-        // Diff2: 0.051
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.018,
+        // DiffV: 0.051
+        DiffU: 0.2097,
+        DiffV: 0.105,
         KA: 0.018,
         KB: 1.0,
         KC: 0.051
     },
     { // Waves
-        // Diff1: 0.014,
-        // Diff2: 0.045
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.014,
+        // DiffV: 0.045
+        DiffU: 0.2097,
+        DiffV: 0.105,
 
         KA: 0.014,
         KC: 0.045,
         KB: 1.0
     },
     { // The U-Skate World
-        // Diff1: 0.062,
-        // Diff2: 0.06093,
-        Diff1: 0.2097,
-        Diff2: 0.105,
+        // DiffU: 0.062,
+        // DiffV: 0.06093,
+        DiffU: 0.2097,
+        DiffV: 0.105,
 
         KA: 0.062,
         KB: 1.0,
@@ -163,8 +166,8 @@ var presets = [
 
 
 // Configuration.
-var Diff1 = presets[0].Diff1;
-var Diff2 = presets[0].Diff2;
+var DiffU = presets[0].DiffU;
+var DiffV = presets[0].DiffV;
 
 var KA = presets[0].KA;
 var KB = presets[0].KB;
@@ -200,8 +203,8 @@ init = function()
         screenHeight: {type: "f", value: undefined},
         tSource: {type: "t", value: undefined},
         delta: {type: "f", value: undefined},
-        Diff1: {type: "f", value: Diff1},
-        Diff2: {type: "f", value: Diff2},
+        DiffU: {type: "f", value: DiffU},
+        DiffV: {type: "f", value: DiffV},
 
 
         //These initialise the kinetic constants
@@ -327,8 +330,8 @@ var render = function(time)
     mScreenQuad.material = mGSMaterial;
     //Important lines useful in changing the timestep/parameters in real time
     mUniforms.delta.value = dt;
-    mUniforms.Diff1.value = Diff1;
-    mUniforms.Diff2.value = Diff2;
+    mUniforms.DiffU.value = DiffU;
+    mUniforms.DiffV.value = DiffV;
     //This updates the kinetic constants according to the User input
     mUniforms.KA.value = document.getElementById('KineticA').value;
     mUniforms.KB.value = document.getElementById('KineticB').value;
@@ -386,8 +389,8 @@ try {
 //This block is responsible for most of the UI (namely the panel)
 loadPreset = function(idx)
 {
-    Diff1 = presets[idx].Diff1;
-    Diff2 = presets[idx].Diff2;
+    DiffU = presets[idx].DiffU;
+    DiffV = presets[idx].DiffV;
     KA = presets[idx].KA;
     KB = presets[idx].KB;
     KC = presets[idx].KC;
@@ -525,9 +528,9 @@ $(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', 
 //Updates the values of the sliders and stuff
 var worldToForm = function()
 {
-    //document.ex.sldReplenishment.value = Diff1 * 1000;
-    $("#sld_replenishment").slider("value", Diff1);
-    $("#sld_diminishment").slider("value", Diff2);
+    //document.ex.sldReplenishment.value = DiffU * 1000;
+    $("#sld_replenishment").slider("value", DiffU);
+    $("#sld_diminishment").slider("value", DiffV);
 
     document.getElementById('KineticA').value = KA;
     document.getElementById('KineticB').value = KB;
@@ -542,17 +545,17 @@ var init_controls = function()
 {//#######################################Very very very lazy implementation of adjusting diffusivity constants.
 
     $("#sld_replenishment").slider({
-        value: Diff1, min: 0, max:10, step:0.01,
-        change: function(event, ui) {$("#replenishment").html(ui.value); Diff1 = ui.value; updateShareString();},
-        slide: function(event, ui) {$("#replenishment").html(ui.value); Diff1 = ui.value; updateShareString();}
+        value: DiffU, min: 0, max:10, step:0.01,
+        change: function(event, ui) {$("#replenishment").html(ui.value); DiffU = ui.value; updateShareString();},
+        slide: function(event, ui) {$("#replenishment").html(ui.value); DiffU = ui.value; updateShareString();}
     });
-    $("#sld_replenishment").slider("value", Diff1);
+    $("#sld_replenishment").slider("value", DiffU);
     $("#sld_diminishment").slider({
-        value: Diff2, min: 0, max:10, step:0.01,
-        change: function(event, ui) {$("#diminishment").html(ui.value); Diff2 = ui.value; updateShareString();},
-        slide: function(event, ui) {$("#diminishment").html(ui.value); Diff2 = ui.value; updateShareString();}
+        value: DiffV, min: 0, max:10, step:0.01,
+        change: function(event, ui) {$("#diminishment").html(ui.value); DiffV = ui.value; updateShareString();},
+        slide: function(event, ui) {$("#diminishment").html(ui.value); DiffV = ui.value; updateShareString();}
     });
-    $("#sld_diminishment").slider("value", Diff2);
+    $("#sld_diminishment").slider("value", DiffV);
 
     //###############################################
     //Looks like some Jquery nonsense I don't know.
@@ -604,10 +607,10 @@ parseShareString = function()
         return;
     }
 
-    var newDiff1 = parseFloat(fields[0]);
-    var newDiff2 = parseFloat(fields[1]);
+    var newDiffU = parseFloat(fields[0]);
+    var newDiffV = parseFloat(fields[1]);
 
-    if(isNaN(newDiff1) || isNaN(newDiff2))
+    if(isNaN(newDiffU) || isNaN(newDiffV))
     {
         alertInvalidShareString();
         return;
@@ -635,14 +638,14 @@ parseShareString = function()
     }
 //Find GRADIENT alex
     $("#gradient").gradient("setValues", newValues);
-    Diff1 = newDiff1;
-    Diff2 = newDiff2;
+    DiffU = newDiffU;
+    DiffV = newDiffV;
     worldToForm();
 }
 
 updateShareString = function()
 {
-    var str = "".concat(Diff1, ",", Diff2);
+    var str = "".concat(DiffU, ",", DiffV);
 
     var values = $("#gradient").gradient("getValues");
     for(var i=0; i<values.length; i++)
